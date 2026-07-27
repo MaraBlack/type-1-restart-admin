@@ -1,0 +1,35 @@
+@layer components {
+  /* ─── Hero inner container ───────────────────────────────────────────────────
+   *
+   *  Apply to the inner <div> inside a full-page hero <section>.
+   *  Used by: home hero, why-dragonfly hero, how-it-started hero, need hero.
+   *
+   * ─────────────────────────────────────────────────────────────────────────── */
+
+  .hero-inner {
+    @apply px-6 py-16 md:px-16 md:py-24 lg:px-8 lg:py-32;
+  }
+
+  /* ─── Section padding tiers ──────────────────────────────────────────────────
+   *
+   *  section-pad     → standard interior sections   (py-16 → py-24)
+   *  section-pad-lg  → tall / emphasis sections     (py-20 → py-28)
+   *  section-pad-sm  → compact home-preview cards   (py-14 → py-20)
+   *
+   *  Apply directly to the <section> element (or inner container when the
+   *  section itself has no padding, e.g. full-bleed backgrounds).
+   *
+   * ─────────────────────────────────────────────────────────────────────────── */
+
+  .section-pad {
+    @apply px-6 py-16 md:px-10 lg:px-12 lg:py-24 min-h-[40dvh];
+  }
+
+  .section-pad-lg {
+    @apply px-6 py-20 md:px-10 lg:px-12 lg:py-28 min-h-[50dvh];
+  }
+
+  .section-pad-sm {
+    @apply px-6 py-14 md:px-10 lg:px-12 lg:py-20;
+  }
+}

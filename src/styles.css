@@ -1,0 +1,81 @@
+@import 'primeicons/primeicons.css';
+
+:root {
+  --color-primary-50: #eefbff;
+  --color-primary-100: #d8f5ff;
+  --color-primary-200: #b5ebff;
+  --color-primary-300: #80ddff;
+  --color-primary-400: #42c9ff;
+  --color-primary-500: #1fbeff;
+  --color-primary-600: #109ed8;
+  --color-primary-700: #0b7fb0;
+  --color-primary-800: #0a678e;
+  --color-primary-900: #0a5675;
+  --color-primary-950: #06384d;
+
+  --color-secondary-50: #f0fdf7;
+  --color-secondary-100: #dcfcef;
+  --color-secondary-200: #b6f7de;
+  --color-secondary-300: #7df0c6;
+  --color-secondary-400: #43e6ad;
+  --color-secondary-500: #53f1b5;
+  --color-secondary-600: #22c891;
+  --color-secondary-700: #159f73;
+  --color-secondary-800: #117b5a;
+  --color-secondary-900: #0e6248;
+  --color-secondary-950: #083d2d;
+
+  --color-accent-50: #edf6fb;
+  --color-accent-100: #d8eaf4;
+  --color-accent-200: #b6d7e6;
+  --color-accent-300: #84bad0;
+  --color-accent-400: #4c95b0;
+  --color-accent-500: #17364a;
+  --color-accent-600: #132d3e;
+  --color-accent-700: #102533;
+  --color-accent-800: #0e1d29;
+  --color-accent-900: #0a141c;
+  --color-accent-950: #050b0f;
+
+  --color-primary: var(--color-primary-500);
+  --color-secondary: var(--color-secondary-500);
+  --color-secondary-light: var(--color-secondary-300);
+  --color-accent: var(--color-accent-500);
+  --color-background-soft: #f4f4f4;
+  --color-primary-soft: color-mix(in srgb, var(--color-primary) 30%, white);
+  --color-secondary-soft: color-mix(in srgb, var(--color-secondary) 30%, white);
+  --color-secondary-light-soft: color-mix(in srgb, var(--color-secondary-light) 30%, white);
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 30%, white);
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+html,
+body {
+  background-color: var(--color-accent);
+  overscroll-behavior-y: contain;
+  margin: 0;
+  padding: 0;
+}
+
+.bg-primary-soft {
+  background-color: var(--color-primary-soft);
+}
+
+.bg-secondary-soft {
+  background-color: var(--color-secondary-soft);
+}
+
+.bg-secondary-light-soft {
+  background-color: var(--color-secondary-light-soft);
+}
+
+.bg-accent-soft {
+  background-color: var(--color-accent-soft);
+}
