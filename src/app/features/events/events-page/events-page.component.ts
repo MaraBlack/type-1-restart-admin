@@ -34,7 +34,7 @@ export class EventsPageComponent {
   }
 
   protected viewEvent(event: EventListItem): void {
-    this.router.navigate(['/events', event.id, 'edit']);
+    this.router.navigate(['/events', event.id, 'view']);
   }
 
   protected editEvent(event: EventListItem): void {

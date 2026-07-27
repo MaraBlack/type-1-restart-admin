@@ -54,7 +54,6 @@ export interface EventSchedule {
 
 export interface Event {
   id: string;
-  slug: string;
   title: LocalizedText;
   shortDescription: LocalizedText;
   description: LocalizedText;
@@ -70,9 +69,6 @@ export interface Event {
   partners?: EventPartner[];
   moderatorIds?: string[];
   performerIds?: string[];
-  moderators?: string[];
-  performers?: string[];
-  closingBand?: string;
   sponsors?: Sponsor[];
   isFeatured?: boolean;
   registrationUrl?: string;
@@ -83,7 +79,6 @@ export interface Event {
 
 export interface EventListItem {
   id: string;
-  slug: string;
   title: LocalizedText;
   category: EventCategory;
   status: EventStatus;
@@ -105,7 +100,6 @@ export interface EventStats {
 }
 
 export interface CreateEventRequest {
-  slug: string;
   title: LocalizedText;
   shortDescription: LocalizedText;
   description: LocalizedText;
@@ -120,9 +114,6 @@ export interface CreateEventRequest {
   partners?: EventPartner[];
   moderatorIds?: string[];
   performerIds?: string[];
-  moderators?: string[];
-  performers?: string[];
-  closingBand?: string;
   isFeatured?: boolean;
   registrationUrl?: string;
 }

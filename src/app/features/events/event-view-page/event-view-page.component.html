@@ -1,0 +1,378 @@
+<main class="min-h-screen bg-[#F7F8FA]">
+  <header class="px-4 pt-6 md:px-6">
+    <div class="mx-auto w-full max-w-5xl">
+      <div class="rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm">
+        <h1 class="m-0 text-2xl font-extrabold text-[#17364A] sm:text-3xl">Event View</h1>
+        <p class="m-0 mt-2 text-sm text-[#17364A99]">
+          Preview public + detalii administrative complete pentru evenimentul selectat.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <section class="px-4 pb-12 pt-7 md:px-6 md:pt-8">
+    <div class="mx-auto w-full max-w-5xl space-y-6">
+      <article
+        *ngIf="loadError"
+        class="rounded-2xl border border-red-200 bg-red-50 p-5 text-red-700"
+      >
+        {{ loadError }}
+      </article>
+
+      <ng-container *ngIf="event$ | async as event">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <a
+            routerLink="/events"
+            class="inline-flex items-center gap-2 rounded-full border border-[#17364A33] bg-white px-4 py-2 text-sm font-semibold text-[#17364A]"
+          >
+            <i class="pi pi-arrow-left"></i>
+            Toate evenimentele
+          </a>
+
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-full border border-[#17364A33] bg-white px-4 py-2 text-sm font-bold text-[#17364A]"
+            (click)="openEdit(event)"
+          >
+            <i class="pi pi-pencil"></i>
+            Edit Event
+          </button>
+        </div>
+
+        <article class="overflow-hidden rounded-2xl bg-white shadow-sm">
+          <div class="relative h-60 w-full md:h-80">
+            <img
+              [src]="getCoverUrl(event)"
+              [alt]="event.title.ro || event.title.en"
+              class="h-full w-full object-cover"
+            />
+
+            <div
+              class="absolute inset-0 bg-[linear-gradient(0deg,rgba(23,54,74,0.88)_0%,rgba(23,54,74,0.56)_46%,rgba(23,54,74,0.18)_78%,rgba(23,54,74,0)_100%)]"
+            ></div>
+
+            <div class="absolute bottom-0 left-0 w-full px-4 pb-5 pt-5 md:px-8 md:pb-7">
+              <div class="flex flex-wrap items-end justify-between gap-3">
+                <div class="max-w-3xl space-y-2">
+                  <span
+                    class="inline-flex rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white"
+                  >
+                    {{ event.category }}
+                  </span>
+                  <h1 class="m-0 text-2xl font-extrabold leading-tight text-white md:text-4xl">
+                    {{ event.title.ro || event.title.en }}
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid gap-10 p-5 md:grid-cols-[minmax(0,1fr)_320px] md:p-8">
+            <div class="space-y-10">
+              <section class="space-y-3">
+                <div class="space-y-1">
+                  <p class="m-0 text-sm font-bold text-[#17364A]">Despre eveniment</p>
+                  <span class="block h-1 w-16 rounded-full bg-[#17364A]"></span>
+                </div>
+                <p class="m-0 text-[15px] leading-7 text-[#17364ABF]">
+                  {{ event.description.ro || event.description.en || '-' }}
+                </p>
+              </section>
+
+              <section class="space-y-3">
+                <div class="space-y-1">
+                  <p class="m-0 text-sm font-bold text-[#17364A]">Detalii</p>
+                  <span class="block h-1 w-10 rounded-full bg-[#17364A]"></span>
+                </div>
+
+                <div class="grid gap-3">
+                  <div
+                    *ngFor="let moderatorId of event.moderatorIds || []"
+                    class="rounded-2xl border border-[#53F1B559] bg-[#53F1B514] p-4"
+                  >
+                    <div class="flex items-center gap-3">
+                      <img
+                        *ngIf="getModeratorImageById(moderatorId)"
+                        [src]="getModeratorImageById(moderatorId)"
+                        [alt]="getModeratorNameById(moderatorId)"
+                        class="h-12 w-12 rounded-full object-cover"
+                      />
+                      <div>
+                        <p class="m-0 text-[10px] font-bold uppercase tracking-wide text-[#17364A]">
+                          Moderator
+                        </p>
+                        <p class="m-0 mt-1 text-sm font-bold text-[#17364A]">
+                          {{ getModeratorNameById(moderatorId) }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    *ngFor="let performerId of event.performerIds || []"
+                    class="rounded-2xl border border-[#1FBEFF4D] bg-[#1FBEFF14] p-4"
+                  >
+                    <div class="flex items-center gap-3">
+                      <img
+                        *ngIf="getPerformerImageById(performerId)"
+                        [src]="getPerformerImageById(performerId)"
+                        [alt]="getPerformerNameById(performerId)"
+                        class="h-12 w-12 rounded-xl object-cover"
+                      />
+                      <div>
+                        <p class="m-0 text-[10px] font-bold uppercase tracking-wide text-[#17364A]">
+                          Performer
+                        </p>
+                        <p class="m-0 mt-1 text-sm font-bold text-[#17364A]">
+                          {{ getPerformerNameById(performerId) }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p
+                    *ngIf="
+                      (!event.moderatorIds || event.moderatorIds.length === 0) &&
+                      (!event.performerIds || event.performerIds.length === 0)
+                    "
+                    class="m-0 text-sm text-[#17364A80]"
+                  >
+                    Nu exista inca moderatori sau performeri atasati.
+                  </p>
+                </div>
+              </section>
+
+              <section class="space-y-3">
+                <div class="space-y-1">
+                  <p class="m-0 text-sm font-bold text-[#17364A]">Sustinut de</p>
+                  <span class="block h-1 w-12 rounded-full bg-[#17364A]"></span>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <div
+                    *ngFor="let sponsor of event.sponsors || []"
+                    class="rounded-2xl border border-[#17364A1A] bg-white p-4 text-center"
+                  >
+                    <img
+                      *ngIf="sponsor.logoImageURL; else sponsorNameOnly"
+                      [src]="sponsor.logoImageURL"
+                      [alt]="sponsor.name"
+                      class="mx-auto h-14 w-14 rounded-full object-cover"
+                    />
+                    <ng-template #sponsorNameOnly>
+                      <p class="m-0 text-sm font-bold text-[#17364A]">{{ sponsor.name }}</p>
+                    </ng-template>
+                  </div>
+
+                  <p
+                    *ngIf="!event.sponsors || event.sponsors.length === 0"
+                    class="m-0 text-sm text-[#17364A80]"
+                  >
+                    Nu exista sponsori atasati.
+                  </p>
+                </div>
+
+                <p class="m-0 text-xs text-[#17364A73]">
+                  Multumim partenerilor care fac posibil acest eveniment.
+                </p>
+              </section>
+            </div>
+
+            <aside class="space-y-6">
+              <section class="rounded-2xl border border-[#ACF88C5C] bg-[#ACF88C2E] p-5">
+                <p class="m-0 text-sm font-bold text-[#17364A]">Data si ora</p>
+                <span class="mt-1 block h-1 w-16 rounded-full bg-[#ACF88C]"></span>
+
+                <div class="flex items-center gap-2.5  px-3 py-2">
+                    <i class="pi pi-calendar text-xs text-[#17364A]"></i>
+                    <p class="m-0 text-sm font-semibold text-[#17364A]">
+                      {{ formatDateOnly(event.schedule.startDate) }}
+                    </p>
+                  </div>
+                  <div class="flex items-center gap-2.5  px-3 py-2">
+                    <i class="pi pi-clock text-xs text-[#17364A]"></i>
+                    <p class="m-0 text-sm font-semibold text-[#17364A]">
+                      {{ formatTimeRange(event) }}
+                    </p>
+                  </div>
+                  <div class="flex items-center gap-2.5  px-3 py-2">
+                    <i class="pi pi-globe text-xs text-[#17364A]"></i>
+                    <p class="m-0 text-sm font-semibold text-[#17364A]">
+                      {{ event.schedule.timezone || '-' }}
+                    </p>
+                  </div>
+              </section>
+
+              <section class="rounded-2xl border border-[#1FBEFF4D] bg-[#1FBEFF1F] p-5">
+                <p class="m-0 text-sm font-bold text-[#17364A]">Urmareste evenimentul</p>
+                <span class="mt-1 block h-1 w-28 rounded-full bg-[#1FBEFF]"></span>
+
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <a
+                    *ngIf="event.socialLinks?.instagramUrl"
+                    [href]="event.socialLinks?.instagramUrl"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="inline-flex items-center gap-2 rounded-full border border-[#17364A26] px-3 py-2 text-xs font-semibold text-[#17364A]"
+                  >
+                    <i class="pi pi-instagram"></i>
+                    Instagram
+                  </a>
+                  <a
+                    *ngIf="event.socialLinks?.facebookUrl"
+                    [href]="event.socialLinks?.facebookUrl"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="inline-flex items-center gap-2 rounded-full border border-[#17364A26] px-3 py-2 text-xs font-semibold text-[#17364A]"
+                  >
+                    <i class="pi pi-facebook"></i>
+                    Facebook
+                  </a>
+                  <a
+                    *ngIf="event.socialLinks?.youtubeUrl"
+                    [href]="event.socialLinks?.youtubeUrl"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="inline-flex items-center gap-2 rounded-full border border-[#17364A26] px-3 py-2 text-xs font-semibold text-[#17364A]"
+                  >
+                    <i class="pi pi-youtube"></i>
+                    YouTube
+                  </a>
+                  <a
+                    *ngIf="event.socialLinks?.xUrl"
+                    [href]="event.socialLinks?.xUrl"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="inline-flex items-center gap-2 rounded-full border border-[#17364A26] px-3 py-2 text-xs font-semibold text-[#17364A]"
+                  >
+                    <i class="pi pi-twitter"></i>
+                    X
+                  </a>
+                  <a
+                    *ngIf="event.socialLinks?.linkedinUrl"
+                    [href]="event.socialLinks?.linkedinUrl"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="inline-flex items-center gap-2 rounded-full border border-[#17364A26] px-3 py-2 text-xs font-semibold text-[#17364A]"
+                  >
+                    <i class="pi pi-linkedin"></i>
+                    LinkedIn
+                  </a>
+                  <p
+                    *ngIf="
+                      !event.socialLinks?.instagramUrl &&
+                      !event.socialLinks?.facebookUrl &&
+                      !event.socialLinks?.youtubeUrl &&
+                      !event.socialLinks?.xUrl &&
+                      !event.socialLinks?.linkedinUrl
+                    "
+                    class="m-0 text-xs text-[#17364A80]"
+                  >
+                    Nu exista linkuri sociale.
+                  </p>
+                </div>
+              </section>
+
+              <section
+                class="overflow-hidden rounded-2xl border border-[#17364A26] bg-white shadow-sm"
+              >
+                <div
+                  class="h-36 bg-[linear-gradient(135deg,rgba(31,190,255,0.2),rgba(83,241,181,0.18))]"
+                ></div>
+                <div class="space-y-2 p-4">
+                  <p class="m-0 text-sm font-bold text-[#17364A]">Locatie</p>
+                  <p class="m-0 text-sm text-[#17364ACC]">{{ event.location.name || '-' }}</p>
+                  <p class="m-0 text-xs text-[#17364A80]">
+                    {{ event.location.city || '-' }}, {{ event.location.country || '-' }}
+                  </p>
+                  <a
+                    *ngIf="event.location.googleMapsUrl"
+                    [href]="event.location.googleMapsUrl"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="inline-flex text-xs font-semibold text-[#1FBEFF]"
+                  >
+                    Deschide in Google Maps
+                  </a>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </article>
+
+        <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+          <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Admin Metadata</h2>
+          </div>
+
+          <div class="grid gap-4 p-5 md:grid-cols-2">
+            <div
+              class="space-y-2 rounded-xl border border-[#17364A14] p-4 text-sm text-[#17364A99]"
+            >
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">ID:</span> {{ event.id }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Status:</span> {{ event.status }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Featured:</span>
+                {{ formatBool(event.isFeatured) }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Published At:</span>
+                {{ formatDate(event.publishedAt) }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Created At:</span>
+                {{ formatDate(event.createdAt) }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Updated At:</span>
+                {{ formatDate(event.updatedAt) }}
+              </p>
+            </div>
+
+            <div
+              class="space-y-2 rounded-xl border border-[#17364A14] p-4 text-sm text-[#17364A99]"
+            >
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Location Type:</span>
+                {{ event.location.type || '-' }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Registration URL:</span>
+                {{ event.registrationUrl || '-' }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Cover Image ID:</span>
+                {{ event.coverImageId || '-' }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Sponsor IDs:</span>
+                {{ joinList(event.sponsorIds) }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Moderator IDs:</span>
+                {{ joinList(event.moderatorIds) }}
+              </p>
+              <p class="m-0">
+                <span class="font-semibold text-[#17364A]">Performer IDs:</span>
+                {{ joinList(event.performerIds) }}
+              </p>
+            </div>
+          </div>
+
+          <details class="border-t border-[#17364A12]">
+            <summary class="cursor-pointer px-5 py-3 text-sm font-bold text-[#17364A]">
+              Payload complet (raw JSON)
+            </summary>
+            <pre class="m-0 overflow-auto bg-[#0f172a] p-5 text-xs text-slate-100">{{
+              event | json
+            }}</pre>
+          </details>
+        </article>
+      </ng-container>
+    </div>
+  </section>
+</main>

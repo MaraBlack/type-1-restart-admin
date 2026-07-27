@@ -5,7 +5,6 @@ const now = '2026-07-27T00:00:00.000Z';
 export const MOCK_EVENTS: Event[] = [
   {
     id: 'event-001',
-    slug: 'future-impact-conference-2026',
     title: {
       ro: 'Future Impact Conference 2026',
       en: 'Future Impact Conference 2026'
@@ -52,7 +51,6 @@ export const MOCK_EVENTS: Event[] = [
   },
   {
     id: 'event-002',
-    slug: 'community-workshop-series',
     title: {
       ro: 'Community Workshop Series',
       en: 'Community Workshop Series'
@@ -94,7 +92,6 @@ export const MOCK_EVENTS: Event[] = [
   },
   {
     id: 'event-003',
-    slug: 'digital-volunteering-webinar',
     title: {
       ro: 'Digital Volunteering Webinar',
       en: 'Digital Volunteering Webinar'
@@ -132,7 +129,6 @@ export const MOCK_EVENTS: Event[] = [
   },
   {
     id: 'event-004',
-    slug: 'local-community-cleanup-day',
     title: {
       ro: 'Local Community Cleanup Day',
       en: 'Local Community Cleanup Day'
@@ -169,7 +165,6 @@ export const MOCK_EVENTS: Event[] = [
   },
   {
     id: 'event-005',
-    slug: 'pilot-fundraising-draft',
     title: {
       ro: 'Pilot Fundraising Draft',
       en: 'Pilot Fundraising Draft'

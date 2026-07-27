@@ -27,7 +27,6 @@ export class SponsorsService {
     const sponsor: Sponsor = {
       id: this.generateId('sponsor'),
       name: payload.name.trim(),
-      slug: this.slugify(payload.name),
       logoImageURL: payload.logoImageURL,
       websiteUrl: payload.websiteUrl?.trim() || undefined,
       type: payload.type,
@@ -54,7 +53,6 @@ export class SponsorsService {
       ...existingSponsor,
       ...payload,
       name: nextName,
-      slug: this.slugify(nextName),
       websiteUrl:
         payload.websiteUrl !== undefined
           ? payload.websiteUrl.trim() || undefined
@@ -77,12 +75,5 @@ export class SponsorsService {
 
   private generateId(prefix: string): string {
     return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
-  }
-
-  private slugify(value: string): string {
-    return value
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
   }
 }

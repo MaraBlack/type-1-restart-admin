@@ -23,7 +23,6 @@ import {
 
 
 type EventFormValue = {
-  slug: string;
   titleRo: string;
   titleEn: string;
   shortDescriptionRo: string;
@@ -120,7 +119,6 @@ export class EventFormPageComponent implements OnInit {
   };
 
   protected readonly form = this.fb.nonNullable.group({
-    slug: ['', Validators.required],
     titleRo: ['', Validators.required],
     titleEn: [''],
     shortDescriptionRo: ['', Validators.required],
@@ -473,7 +471,6 @@ export class EventFormPageComponent implements OnInit {
       };
 
     const payload = {
-      slug: formValue.slug,
       title: {
         ro: formValue.titleRo,
         en: formValue.titleEn
@@ -522,7 +519,6 @@ export class EventFormPageComponent implements OnInit {
 
   private toFormValue(event: AdminEvent): Partial<EventFormValue> {
     return {
-      slug: event.slug,
       titleRo: event.title.ro,
       titleEn: event.title.en,
       shortDescriptionRo: event.shortDescription.ro,
@@ -556,32 +552,11 @@ export class EventFormPageComponent implements OnInit {
   }
 
   private resolveModeratorIds(event: AdminEvent): string[] {
-    if (event.moderatorIds?.length) {
-      return [...event.moderatorIds];
-    }
-
-    const available = this.moderatorsService.getSnapshot();
-
-    return (event.moderators ?? [])
-      .map((name) =>
-        available.find((moderator) => moderator.name.toLowerCase().trim() === name.toLowerCase().trim())?.id
-      )
-      .filter((id): id is string => Boolean(id));
+    return event.moderatorIds?.length ? [...event.moderatorIds] : [];
   }
 
   private resolvePerformerIds(event: AdminEvent): string[] {
-    if (event.performerIds?.length) {
-      return [...event.performerIds];
-    }
-
-    const available = this.performersService.getSnapshot();
-    const names = event.performers ?? (event.closingBand ? [event.closingBand] : []);
-
-    return names
-      .map((name) =>
-        available.find((performer) => performer.name.toLowerCase().trim() === name.toLowerCase().trim())?.id
-      )
-      .filter((id): id is string => Boolean(id));
+    return event.performerIds?.length ? [...event.performerIds] : [];
   }
 
   private updateLocationValidators(locationType: EventLocationType): void {

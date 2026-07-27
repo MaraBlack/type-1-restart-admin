@@ -5,7 +5,6 @@ export type SponsorType = 'sponsor' | 'partner' | 'mediaPartner' | 'organizer';
 export interface Sponsor {
   id: string;
   name: string;
-  slug: string;
   logoImageURL?: string;
   logoImage?: ImageAsset;
   websiteUrl?: string;

@@ -16,15 +16,22 @@ export const routes: Routes = [
   {
     path: 'events/new',
     loadComponent: () =>
-      import('./features/events/events-upsert-page/event-form-page.component').then(
+      import('./features/events/event-upsert-page/event-form-page.component').then(
         (module) => module.EventFormPageComponent
       )
   },
   {
     path: 'events/:id/edit',
     loadComponent: () =>
-      import('./features/events/events-upsert-page/event-form-page.component').then(
+      import('./features/events/event-upsert-page/event-form-page.component').then(
         (module) => module.EventFormPageComponent
+      )
+  },
+  {
+    path: 'events/:id/view',
+    loadComponent: () =>
+      import('./features/events/event-view-page/event-view-page.component').then(
+        (module) => module.EventViewPageComponent
       )
   },
   {
@@ -47,9 +54,14 @@ export const routes: Routes = [
   {
     path: 'admin/events/:id/edit',
     loadComponent: () =>
-      import('./features/events/events-upsert-page/event-form-page.component').then(
+      import('./features/events/event-upsert-page/event-form-page.component').then(
         (module) => module.EventFormPageComponent
       )
+  },
+  {
+    path: 'admin/events/:id/view',
+    pathMatch: 'full',
+    redirectTo: 'events/:id/view'
   },
   {
     path: '**',

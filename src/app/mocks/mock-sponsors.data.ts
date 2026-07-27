@@ -6,7 +6,6 @@ export const MOCK_SPONSORS: Sponsor[] = [
   {
     id: 'sponsor-001',
     name: 'Hope Foundation',
-    slug: 'hope-foundation',
     websiteUrl: 'https://example.org',
     type: 'sponsor',
     logoImageURL: 'https://images.seeklogo.com/logo-png/32/1/medlife-logo-png_seeklogo-320752.png',
@@ -16,7 +15,6 @@ export const MOCK_SPONSORS: Sponsor[] = [
   {
     id: 'sponsor-002',
     name: 'Future Labs',
-    slug: 'future-labs',
     websiteUrl: 'https://example.com',
     type: 'partner',
     createdAt: now,
@@ -25,7 +23,6 @@ export const MOCK_SPONSORS: Sponsor[] = [
   {
     id: 'sponsor-003',
     name: 'Community Voice',
-    slug: 'community-voice',
     websiteUrl: 'https://example.net',
     type: 'mediaPartner',
     createdAt: now,

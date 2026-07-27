@@ -81,7 +81,6 @@ export class EventsService {
     const now = new Date().toISOString();
     const event: Event = {
       id: this.generateId('event'),
-      slug: payload.slug,
       title: payload.title,
       shortDescription: payload.shortDescription,
       description: payload.description,
@@ -96,9 +95,6 @@ export class EventsService {
       partners: payload.partners ? [...payload.partners] : [],
       moderatorIds: payload.moderatorIds ? [...payload.moderatorIds] : [],
       performerIds: payload.performerIds ? [...payload.performerIds] : [],
-      moderators: payload.moderators ? [...payload.moderators] : [],
-      performers: payload.performers ? [...payload.performers] : [],
-      closingBand: payload.closingBand,
       isFeatured: payload.isFeatured ?? false,
       registrationUrl: payload.registrationUrl,
       publishedAt: payload.status === 'published' ? now : undefined,
@@ -132,9 +128,6 @@ export class EventsService {
         payload.moderatorIds ? [...payload.moderatorIds] : [...existingEvent.moderatorIds ?? []],
       performerIds:
         payload.performerIds ? [...payload.performerIds] : [...existingEvent.performerIds ?? []],
-      moderators: payload.moderators ? [...payload.moderators] : [...existingEvent.moderators ?? []],
-      performers: payload.performers ? [...payload.performers] : [...existingEvent.performers ?? []],
-      closingBand: payload.closingBand ?? existingEvent.closingBand,
       updatedAt: new Date().toISOString(),
       publishedAt:
         payload.status === 'draft'
@@ -189,38 +182,20 @@ export class EventsService {
 
   private enrichEvent(event: Event): Event {
     const coverImage = event.coverImageId ? this.findImage(event.coverImageId) : undefined;
-    const moderators = this.moderatorsService.getSnapshot();
-    const performers = this.performersService.getSnapshot();
     const sponsors = event.sponsorIds
       .map((sponsorId) => this.findSponsor(sponsorId))
       .filter((sponsor): sponsor is Sponsor => Boolean(sponsor));
 
-    const moderatorNames = event.moderatorIds?.length
-      ? event.moderatorIds
-        .map((moderatorId) => moderators.find((item) => item.id === moderatorId)?.name)
-        .filter((name): name is string => Boolean(name))
-      : event.moderators ?? [];
-
-    const performerNames = event.performerIds?.length
-      ? event.performerIds
-        .map((performerId) => performers.find((item) => item.id === performerId)?.name)
-        .filter((name): name is string => Boolean(name))
-      : event.performers ?? [];
-
     return {
       ...event,
       coverImage,
-      sponsors,
-      moderators: moderatorNames,
-      performers: performerNames,
-      closingBand: performerNames[0] ?? event.closingBand
+      sponsors
     };
   }
 
   private toListItem(event: Event): EventListItem {
     return {
       id: event.id,
-      slug: event.slug,
       title: event.title,
       category: event.category,
       status: event.status,
