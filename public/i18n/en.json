@@ -1,0 +1,119 @@
+{
+  "adminEvents": {
+    "page": {
+      "eyebrow": "Event administration",
+      "title": "Events",
+      "description": "Manage events from mock data now, then replace the services later without changing the page structure."
+    },
+    "stats": {
+      "total": "Total",
+      "published": "Published",
+      "draft": "Unpublished",
+      "upcoming": "Upcoming"
+    },
+    "table": {
+      "title": "Title",
+      "category": "Category",
+      "status": "Status",
+      "date": "Date",
+      "city": "City",
+      "actions": "Actions",
+      "empty": "There are no events in the list."
+    },
+    "labels": {
+      "featured": "Featured"
+    },
+    "categories": {
+      "conference": "Conference",
+      "workshop": "Workshop",
+      "webinar": "Webinar",
+      "campaign": "Campaign",
+      "community": "Community",
+      "fundraising": "Fundraising",
+      "other": "Other"
+    },
+    "status": {
+      "draft": "Unpublished",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "actions": {
+      "create": "Create event",
+      "view": "View",
+      "edit": "Edit",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "backToList": "Back to list"
+    },
+    "form": {
+      "eyebrow": "Event form",
+      "createTitle": "Create event",
+      "editTitle": "Edit event",
+      "description": "Fill the core fields now; sponsors, images, and extra fields can be added later without changing the page structure.",
+      "note": "Sponsors and cover image are handled separately in services so the real API can be connected later without a UI refactor.",
+      "hints": {
+        "slug": "The slug will be used in the public event URL (example: /event/slug).",
+        "languageToggle": "Fill in the title and descriptions in both languages (RO and EN)."
+      },
+      "fields": {
+        "slug": "Slug",
+        "category": "Category",
+        "titleRo": "Title RO",
+        "titleEn": "Title EN",
+        "shortDescriptionRo": "Short description RO",
+        "shortDescriptionEn": "Short description EN",
+        "descriptionRo": "Description RO",
+        "descriptionEn": "Description EN",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "startTime": "Start time",
+        "endTime": "End time",
+        "locationType": "Event type",
+        "city": "City",
+        "locationName": "Location name",
+        "address": "Address",
+        "country": "Country",
+        "ticketingUrl": "Ticketing URL",
+        "googleMapsUrl": "Google Maps URL",
+        "status": "Status",
+        "registrationUrl": "Registration URL",
+        "coverImageUrl": "Cover image URL",
+        "sponsorName": "Sponsor name",
+        "sponsorLogoUrl": "Image/logo URL",
+        "sponsorWebsiteUrl": "Website",
+        "closingBand": "Closing band (optional)",
+        "closingBandPlaceholder": "Example: The Mono Jacks",
+        "isFeatured": "Mark as featured"
+      },
+      "location": {
+        "offline": "Offline event",
+        "online": "Online event"
+      },
+      "sections": {
+        "sponsors": "Sponsors and partners",
+        "sponsorItem": "Sponsor",
+        "noSponsors": "You have not added any sponsors or partners yet."
+      },
+      "actions": {
+        "addSponsor": "Add sponsor",
+        "selectExistingSponsors": "Select from existing sponsors",
+        "addSelectedSponsors": "Add selection",
+        "selectExistingModerators": "Select existing moderators",
+        "addSelectedModerators": "Add selected moderators",
+        "selectExistingPerformers": "Select existing performers",
+        "addSelectedPerformers": "Add selected performers"
+      },
+      "dialogs": {
+        "sponsorPickerTitle": "Existing sponsors",
+        "sponsorPickerDescription": "Select the existing sponsors you want to add to this event.",
+        "moderatorPickerTitle": "Existing moderators",
+        "moderatorPickerDescription": "Select the existing moderators you want to add to this event.",
+        "performerPickerTitle": "Existing performers / bands",
+        "performerPickerDescription": "Select the existing performers or bands you want to add to this event."
+      }
+    }
+  }
+}

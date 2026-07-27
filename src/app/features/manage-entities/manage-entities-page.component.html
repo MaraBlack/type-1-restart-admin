@@ -1,0 +1,355 @@
+<main class="min-h-screen bg-[#F7F8FA]">
+  <header class="px-4 pt-6 md:px-6">
+    <div class="mx-auto w-full max-w-5xl">
+      <div class="rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm">
+        <h1 class="m-0 text-2xl font-extrabold text-[#17364A] sm:text-3xl">Manage Entities</h1>
+        <p class="m-0 mt-2 text-sm text-[#17364A99]">
+          Administrezi într-o singură pagină Sponsors, Moderators și Performers pentru selecția pe
+          bază de id în Events.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <section class="px-4 pb-8 pt-7 md:px-6 md:pt-8">
+    <div class="mx-auto w-full max-w-5xl space-y-8">
+      <p-tabs [(value)]="activeTab" class="block">
+        <p-tablist>
+          <p-tab value="sponsors">Sponsors</p-tab>
+          <p-tab value="moderators">Moderators</p-tab>
+          <p-tab value="performers">Performers</p-tab>
+        </p-tablist>
+
+        <p-tabpanels>
+          <p-tabpanel value="sponsors">
+            <article
+              class="space-y-4 overflow-hidden rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm"
+            >
+              <h2 class="m-0 text-lg font-extrabold text-[#17364A]">Sponsors CRUD</h2>
+
+              <div class="grid gap-3 md:grid-cols-4">
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  placeholder="Sponsor name"
+                  [(ngModel)]="sponsorDraft.name"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="url"
+                  placeholder="Website URL"
+                  [(ngModel)]="sponsorDraft.websiteUrl"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                <p-select
+                  class="w-full"
+                  [(ngModel)]="sponsorDraft.type"
+                  [ngModelOptions]="{ standalone: true }"
+                  [options]="sponsorTypeOptions"
+                ></p-select>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-plus"
+                  label="Add Sponsor"
+                  (click)="addSponsor()"
+                ></button>
+              </div>
+
+              <div class="space-y-3" *ngIf="sponsors$ | async as sponsors">
+                <div *ngFor="let item of sponsors" class="rounded-xl border border-[#17364A1A] p-4">
+                  <div
+                    *ngIf="!isEditingSponsor(item.id)"
+                    class="flex flex-wrap items-start justify-between gap-3"
+                  >
+                    <div class="space-y-1">
+                      <p class="m-0 text-sm font-bold text-[#17364A]">{{ item.name }}</p>
+                      <p class="m-0 text-xs text-[#17364A99]">{{ item.websiteUrl || '-' }}</p>
+                      <p class="m-0 text-xs text-[#17364A80]">{{ item.type }}</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-outlined"
+                        label="Edit"
+                        (click)="startEditSponsor(item)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-danger p-button-outlined"
+                        label="Delete"
+                        (click)="deleteSponsor(item.id)"
+                      ></button>
+                    </div>
+                  </div>
+
+                  <div *ngIf="isEditingSponsor(item.id)" class="grid gap-2 md:grid-cols-4">
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="text"
+                      [(ngModel)]="sponsorEditDraft.name"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="url"
+                      [(ngModel)]="sponsorEditDraft.websiteUrl"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <p-select
+                      class="w-full"
+                      [(ngModel)]="sponsorEditDraft.type"
+                      [ngModelOptions]="{ standalone: true }"
+                      [options]="sponsorTypeOptions"
+                    ></p-select>
+                    <div class="flex gap-2">
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm"
+                        label="Save"
+                        (click)="saveSponsor(item)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-outlined"
+                        label="Cancel"
+                        (click)="editingSponsorId = null"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </p-tabpanel>
+
+          <p-tabpanel value="moderators">
+            <article
+              class="space-y-4 overflow-hidden rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm"
+            >
+              <h2 class="m-0 text-lg font-extrabold text-[#17364A]">Moderators CRUD</h2>
+
+              <div class="grid gap-3 md:grid-cols-3">
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  placeholder="Moderator name"
+                  [(ngModel)]="moderatorDraft.name"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="url"
+                  placeholder="Image URL"
+                  [(ngModel)]="moderatorDraft.imageUrl"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-plus"
+                  label="Add Moderator"
+                  (click)="addModerator()"
+                ></button>
+              </div>
+
+              <div class="space-y-3" *ngIf="moderators$ | async as moderators">
+                <div
+                  *ngFor="let item of moderators"
+                  class="rounded-xl border border-[#17364A1A] p-4"
+                >
+                  <div
+                    *ngIf="!isEditingModerator(item.id)"
+                    class="flex flex-wrap items-start justify-between gap-3"
+                  >
+                    <div class="flex min-w-0 items-center gap-3">
+                      <img
+                        *ngIf="item.imageUrl"
+                        [src]="item.imageUrl"
+                        [alt]="item.name"
+                        class="h-10 w-10 rounded-full object-cover"
+                      />
+                      <div>
+                        <p class="m-0 text-sm font-bold text-[#17364A]">{{ item.name }}</p>
+                        <p class="m-0 text-xs text-[#17364A99]">{{ item.imageUrl || '-' }}</p>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-outlined"
+                        label="Edit"
+                        (click)="startEditModerator(item)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-danger p-button-outlined"
+                        label="Delete"
+                        (click)="deleteModerator(item.id)"
+                      ></button>
+                    </div>
+                  </div>
+
+                  <div *ngIf="isEditingModerator(item.id)" class="grid gap-2 md:grid-cols-3">
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="text"
+                      [(ngModel)]="moderatorEditDraft.name"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="url"
+                      [(ngModel)]="moderatorEditDraft.imageUrl"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <div class="flex gap-2">
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm"
+                        label="Save"
+                        (click)="saveModerator(item)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-outlined"
+                        label="Cancel"
+                        (click)="editingModeratorId = null"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </p-tabpanel>
+
+          <p-tabpanel value="performers">
+            <article
+              class="space-y-4 overflow-hidden rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm"
+            >
+              <h2 class="m-0 text-lg font-extrabold text-[#17364A]">Performers CRUD</h2>
+
+              <div class="grid gap-3 md:grid-cols-4">
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  placeholder="Performer or band name"
+                  [(ngModel)]="performerDraft.name"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="url"
+                  placeholder="Image URL"
+                  [(ngModel)]="performerDraft.imageUrl"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="url"
+                  placeholder="Website URL"
+                  [(ngModel)]="performerDraft.websiteUrl"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-plus"
+                  label="Add Performer"
+                  (click)="addPerformer()"
+                ></button>
+              </div>
+
+              <div class="space-y-3" *ngIf="performers$ | async as performers">
+                <div
+                  *ngFor="let item of performers"
+                  class="rounded-xl border border-[#17364A1A] p-4"
+                >
+                  <div
+                    *ngIf="!isEditingPerformer(item.id)"
+                    class="flex flex-wrap items-start justify-between gap-3"
+                  >
+                    <div class="flex min-w-0 items-center gap-3">
+                      <img
+                        *ngIf="item.imageUrl"
+                        [src]="item.imageUrl"
+                        [alt]="item.name"
+                        class="h-10 w-10 rounded-full object-cover"
+                      />
+                      <div>
+                        <p class="m-0 text-sm font-bold text-[#17364A]">{{ item.name }}</p>
+                        <p class="m-0 text-xs text-[#17364A99]">{{ item.imageUrl || '-' }}</p>
+                        <p class="m-0 text-xs text-[#17364A80]">{{ item.websiteUrl || '-' }}</p>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-outlined"
+                        label="Edit"
+                        (click)="startEditPerformer(item)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-danger p-button-outlined"
+                        label="Delete"
+                        (click)="deletePerformer(item.id)"
+                      ></button>
+                    </div>
+                  </div>
+
+                  <div *ngIf="isEditingPerformer(item.id)" class="grid gap-2 md:grid-cols-4">
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="text"
+                      [(ngModel)]="performerEditDraft.name"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="url"
+                      [(ngModel)]="performerEditDraft.imageUrl"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="url"
+                      [(ngModel)]="performerEditDraft.websiteUrl"
+                      [ngModelOptions]="{ standalone: true }"
+                    />
+                    <div class="flex gap-2">
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm"
+                        label="Save"
+                        (click)="savePerformer(item)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        class="p-button-sm p-button-outlined"
+                        label="Cancel"
+                        (click)="editingPerformerId = null"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,881 @@
+<main class="min-h-screen bg-[#F7F8FA]">
+  <header class="px-4 pt-6 md:px-6">
+    <div class="mx-auto w-full max-w-5xl">
+      <div class="rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm">
+        <h1 class="m-0 text-2xl font-extrabold text-[#17364A] sm:text-3xl">
+          {{
+            (isEditMode ? 'adminEvents.form.editTitle' : 'adminEvents.form.createTitle') | translate
+          }}
+        </h1>
+      </div>
+    </div>
+  </header>
+
+  <section class="px-4 pb-8 pt-7 md:px-6 md:pt-8">
+    <div class="mx-auto w-full max-w-5xl">
+      <a
+        routerLink="/events"
+        class="inline-flex items-center gap-2 rounded-full border border-[#17364A33] bg-white px-4 py-2 text-sm font-semibold text-[#17364A]"
+      >
+        <i class="pi pi-arrow-left"></i>
+        {{ 'adminEvents.actions.backToList' | translate }}
+      </a>
+
+      <form [formGroup]="form" class="mt-6 space-y-6" (ngSubmit)="save()">
+        <article class="rounded-2xl border border-[#53F1B559] bg-[#53F1B51A] p-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span
+                class="h-2.5 w-2.5 rounded-full bg-[#53F1B5] shadow-[0_0_8px_rgba(83,241,181,0.8)]"
+              ></span>
+              <div>
+                <p class="m-0 text-sm font-extrabold text-[#17364A]">
+                  {{ 'adminEvents.status.' + form.controls.status.value | translate }}
+                </p>
+                <small class="text-xs text-[#17364A99]">{{
+                  'adminEvents.form.note' | translate
+                }}</small>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button
+                pButton
+                type="button"
+                class="p-button-sm p-button-outlined"
+                [label]="'adminEvents.status.draft' | translate"
+                (click)="form.controls.status.setValue('draft')"
+              ></button>
+              <button
+                pButton
+                type="button"
+                class="p-button-sm"
+                [label]="'adminEvents.status.published' | translate"
+                (click)="form.controls.status.setValue('published')"
+              ></button>
+            </div>
+          </div>
+        </article>
+
+        <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+          <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Informații principale</h2>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 p-5 md:grid-cols-2">
+            <label class="grid gap-1.5 md:col-span-2">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.slug' | translate
+              }}</span>
+              <input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="text"
+                formControlName="slug"
+              />
+              <small class="text-xs text-[#17364A80]">{{
+                'adminEvents.form.hints.slug' | translate
+              }}</small>
+            </label>
+
+            <label class="grid gap-1.5">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.category' | translate
+              }}</span>
+              <p-select class="w-full" formControlName="category" [options]="categoryOptions">
+                <ng-template #selectedItem let-category>
+                  {{ 'adminEvents.categories.' + category | translate }}
+                </ng-template>
+                <ng-template #item let-category>
+                  {{ 'adminEvents.categories.' + category | translate }}
+                </ng-template>
+              </p-select>
+            </label>
+
+            <label class="grid gap-1.5">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.status' | translate
+              }}</span>
+              <p-select class="w-full" formControlName="status" [options]="statusOptions">
+                <ng-template #selectedItem let-status>
+                  {{ 'adminEvents.status.' + status | translate }}
+                </ng-template>
+                <ng-template #item let-status>
+                  {{ 'adminEvents.status.' + status | translate }}
+                </ng-template>
+              </p-select>
+            </label>
+
+            <div class="md:col-span-2">
+              <div class="inline-flex rounded-xl border border-[#17364A26] bg-white p-1">
+                <button
+                  type="button"
+                  class="rounded-lg px-4 py-2 text-sm font-semibold"
+                  [ngClass]="
+                    activeMainInfoLang === 'ro' ? 'bg-[#17364A] text-white' : 'text-[#17364A99]'
+                  "
+                  (click)="activeMainInfoLang = 'ro'"
+                >
+                  RO
+                </button>
+                <button
+                  type="button"
+                  class="rounded-lg px-4 py-2 text-sm font-semibold"
+                  [ngClass]="
+                    activeMainInfoLang === 'en' ? 'bg-[#17364A] text-white' : 'text-[#17364A99]'
+                  "
+                  (click)="activeMainInfoLang = 'en'"
+                >
+                  EN
+                </button>
+              </div>
+              <small class="mt-2 block text-xs text-[#17364A80]">{{
+                'adminEvents.form.hints.languageToggle' | translate
+              }}</small>
+            </div>
+
+            <ng-container *ngIf="activeMainInfoLang === 'ro'; else englishMainInfoFields">
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.titleRo' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  formControlName="titleRo"
+                />
+              </label>
+
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.shortDescriptionRo' | translate
+                }}</span>
+                <textarea
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  rows="3"
+                  formControlName="shortDescriptionRo"
+                ></textarea>
+              </label>
+
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.descriptionRo' | translate
+                }}</span>
+                <textarea
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  rows="5"
+                  formControlName="descriptionRo"
+                ></textarea>
+              </label>
+            </ng-container>
+
+            <ng-template #englishMainInfoFields>
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.titleEn' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  formControlName="titleEn"
+                />
+              </label>
+
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.shortDescriptionEn' | translate
+                }}</span>
+                <textarea
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  rows="3"
+                  formControlName="shortDescriptionEn"
+                ></textarea>
+              </label>
+
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.descriptionEn' | translate
+                }}</span>
+                <textarea
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  rows="4"
+                  formControlName="descriptionEn"
+                ></textarea>
+              </label>
+            </ng-template>
+          </div>
+        </article>
+
+        <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+          <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Dată, oră și locație</h2>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 p-5 md:grid-cols-2">
+            <label class="grid gap-1.5">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.startDate' | translate
+              }}</span>
+              <input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="date"
+                formControlName="startDate"
+              />
+            </label>
+
+            <label class="grid gap-1.5">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.endDate' | translate
+              }}</span>
+              <input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="date"
+                formControlName="endDate"
+              />
+            </label>
+
+            <label class="grid gap-1.5">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.startTime' | translate
+              }}</span>
+              <input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="time"
+                formControlName="startTime"
+              />
+            </label>
+
+            <label class="grid gap-1.5">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.endTime' | translate
+              }}</span>
+              <input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="time"
+                formControlName="endTime"
+              />
+            </label>
+
+            <div class="md:col-span-2">
+              <span class="mb-2 block text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.locationType' | translate
+              }}</span>
+              <div class="inline-flex rounded-xl border border-[#17364A26] bg-white p-1">
+                <button
+                  type="button"
+                  class="rounded-lg px-4 py-2 text-sm font-semibold"
+                  [ngClass]="
+                    form.controls.locationType.value === 'offline'
+                      ? 'bg-[#17364A] text-white'
+                      : 'text-[#17364A99]'
+                  "
+                  (click)="form.controls.locationType.setValue('offline')"
+                >
+                  {{ 'adminEvents.form.location.offline' | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="rounded-lg px-4 py-2 text-sm font-semibold"
+                  [ngClass]="
+                    form.controls.locationType.value === 'online'
+                      ? 'bg-[#17364A] text-white'
+                      : 'text-[#17364A99]'
+                  "
+                  (click)="form.controls.locationType.setValue('online')"
+                >
+                  {{ 'adminEvents.form.location.online' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <ng-container *ngIf="isOnlineEvent; else offlineFields">
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.ticketingUrl' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="url"
+                  formControlName="ticketingUrl"
+                />
+              </label>
+
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.registrationUrl' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="url"
+                  formControlName="registrationUrl"
+                />
+              </label>
+            </ng-container>
+
+            <ng-template #offlineFields>
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.locationName' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  formControlName="locationName"
+                />
+              </label>
+
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.city' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  formControlName="city"
+                />
+              </label>
+
+              <label class="grid gap-1.5 md:col-span-2">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.address' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  formControlName="address"
+                />
+              </label>
+
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.country' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="text"
+                  formControlName="country"
+                />
+              </label>
+
+              <label class="grid gap-1.5">
+                <span class="text-sm font-bold text-[#17364A]">{{
+                  'adminEvents.form.fields.googleMapsUrl' | translate
+                }}</span>
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  type="url"
+                  formControlName="googleMapsUrl"
+                />
+              </label>
+            </ng-template>
+          </div>
+        </article>
+
+        <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+          <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Imagine cover</h2>
+          </div>
+
+          <div class="space-y-4 p-5">
+            <p-fileupload
+              mode="advanced"
+              [multiple]="false"
+              [showUploadButton]="false"
+              [showCancelButton]="false"
+              accept="image/*"
+              [maxFileSize]="2000000"
+              chooseIcon="pi pi-image"
+              [chooseLabel]="'Select image'"
+              (onSelect)="onImageSelect($event)"
+            ></p-fileupload>
+
+            <label class="grid gap-1.5">
+              <span class="text-sm font-bold text-[#17364A]">{{
+                'adminEvents.form.fields.coverImageUrl' | translate
+              }}</span>
+              <input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="url"
+                formControlName="coverImageUrl"
+              />
+            </label>
+
+            <div
+              *ngIf="selectedImagePreviewUrl || form.controls.coverImageUrl.value"
+              class="overflow-hidden rounded-xl border border-[#17364A1F] bg-slate-100 p-2"
+            >
+              <img
+                [src]="selectedImagePreviewUrl || form.controls.coverImageUrl.value"
+                alt="cover preview"
+                class="h-44 w-full rounded-lg object-cover md:h-56"
+              />
+            </div>
+          </div>
+        </article>
+
+        <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+          <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Social media</h2>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 p-5 md:grid-cols-2">
+            <label class="grid gap-1.5"
+              ><span class="text-sm font-bold text-[#17364A]">Instagram URL</span
+              ><input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="url"
+                formControlName="instagramUrl"
+            /></label>
+            <label class="grid gap-1.5"
+              ><span class="text-sm font-bold text-[#17364A]">Facebook URL</span
+              ><input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="url"
+                formControlName="facebookUrl"
+            /></label>
+            <label class="grid gap-1.5"
+              ><span class="text-sm font-bold text-[#17364A]">X URL</span
+              ><input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="url"
+                formControlName="xUrl"
+            /></label>
+            <label class="grid gap-1.5"
+              ><span class="text-sm font-bold text-[#17364A]">Youtube URL</span
+              ><input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="url"
+                formControlName="youtubeUrl"
+            /></label>
+            <label class="grid gap-1.5 md:col-span-2"
+              ><span class="text-sm font-bold text-[#17364A]">LinkedIn URL</span
+              ><input
+                class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                type="url"
+                formControlName="linkedinUrl"
+            /></label>
+          </div>
+        </article>
+
+        <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+          <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">
+              {{ 'adminEvents.form.sections.sponsors' | translate }}
+            </h2>
+          </div>
+
+          <div class="space-y-5 p-5">
+            <div class="space-y-3">
+              <div class="flex flex-wrap justify-end gap-2">
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-sm p-button-outlined"
+                  icon="pi pi-list-check"
+                  [label]="'adminEvents.form.actions.selectExistingSponsors' | translate"
+                  (click)="openSponsorPicker()"
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-sm border-none bg-[#ACF88C66] text-[#17364A]"
+                  icon="pi pi-plus"
+                  [label]="'adminEvents.form.actions.addSponsor' | translate"
+                  (click)="addSponsor()"
+                ></button>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                <label class="grid gap-1.5">
+                  <span class="text-sm font-bold text-[#17364A]">{{
+                    'adminEvents.form.fields.sponsorName' | translate
+                  }}</span>
+                  <input
+                    class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                    type="text"
+                    [(ngModel)]="sponsorDraft.name"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Ex: MedLife"
+                  />
+                </label>
+
+                <label class="grid gap-1.5">
+                  <span class="text-sm font-bold text-[#17364A]">{{
+                    'adminEvents.form.fields.sponsorWebsiteUrl' | translate
+                  }}</span>
+                  <input
+                    class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                    type="url"
+                    [(ngModel)]="sponsorDraft.websiteUrl"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                </label>
+
+                <label class="grid gap-1.5">
+                  <span class="text-sm font-bold text-[#17364A]">{{
+                    'adminEvents.form.fields.sponsorLogoUrl' | translate
+                  }}</span>
+                  <input
+                    class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                    type="url"
+                    [(ngModel)]="sponsorDraft.logoUrl"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div formArrayName="sponsors" class="space-y-2">
+              <div
+                *ngFor="let sponsorCtrl of sponsorsArray.controls; let i = index"
+                [formGroupName]="i"
+                class="flex items-center gap-3 rounded-xl border border-[#ACF88C4D] bg-[#ACF88C14] px-4 py-3"
+              >
+                <div
+                  *ngIf="sponsorCtrl.value.logoUrl"
+                  class="h-8 w-8 shrink-0 overflow-hidden rounded-full bg-white/70"
+                >
+                  <img
+                    [src]="sponsorCtrl.value.logoUrl"
+                    [alt]="sponsorCtrl.value.name || 'sponsor logo'"
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+
+                <div class="min-w-0 flex-1">
+                  <p class="m-0 truncate text-sm font-bold text-[#17364A]">
+                    {{ sponsorCtrl.value.name }}
+                  </p>
+                  <p class="m-0 truncate text-xs text-[#17364A80]">
+                    {{ sponsorCtrl.value.websiteUrl }}
+                  </p>
+                </div>
+
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-text p-button-secondary p-button-sm"
+                  icon="pi pi-trash"
+                  (click)="removeSponsor(i)"
+                ></button>
+              </div>
+
+              <p *ngIf="sponsorsArray.length === 0" class="m-0 text-sm text-[#17364A80]">
+                {{ 'adminEvents.form.sections.noSponsors' | translate }}
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <p-dialog
+          [(visible)]="sponsorPickerVisible"
+          [modal]="true"
+          [draggable]="false"
+          [resizable]="false"
+          [style]="{ width: 'min(92vw, 38rem)' }"
+          [header]="'adminEvents.form.dialogs.sponsorPickerTitle' | translate"
+        >
+          <div class="space-y-3">
+            <p class="m-0 text-sm text-[#17364A99]">
+              {{ 'adminEvents.form.dialogs.sponsorPickerDescription' | translate }}
+            </p>
+
+            <div class="max-h-72 space-y-2 overflow-auto pr-1">
+              <label
+                *ngFor="let sponsor of availableSponsors"
+                class="flex cursor-pointer items-start gap-3 rounded-lg border border-[#17364A1F] p-3"
+              >
+                <input
+                  type="checkbox"
+                  class="mt-0.5"
+                  [checked]="isAvailableSponsorSelected(sponsor.id)"
+                  (change)="
+                    toggleAvailableSponsorSelection(sponsor.id, $any($event.target).checked)
+                  "
+                />
+
+                <div class="min-w-0">
+                  <p class="m-0 truncate text-sm font-semibold text-[#17364A]">
+                    {{ sponsor.name }}
+                  </p>
+                  <p class="m-0 truncate text-xs text-[#17364A80]">
+                    {{ sponsor.websiteUrl || '-' }}
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+              <button
+                pButton
+                type="button"
+                class="p-button-sm p-button-outlined"
+                [label]="'adminEvents.actions.cancel' | translate"
+                (click)="closeSponsorPicker()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                class="p-button-sm"
+                [label]="'adminEvents.form.actions.addSelectedSponsors' | translate"
+                (click)="addSelectedSponsorsToList()"
+              ></button>
+            </div>
+          </div>
+        </p-dialog>
+
+        <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+          <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Detalii</h2>
+          </div>
+
+          <div class="grid gap-5 p-5 md:grid-cols-2">
+            <section class="space-y-3 rounded-xl border border-[#17364A1A] p-4">
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="m-0 text-sm font-bold text-[#17364A]">Moderatori</h3>
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-sm p-button-outlined"
+                  icon="pi pi-list-check"
+                  [label]="'adminEvents.form.actions.selectExistingModerators' | translate"
+                  (click)="openModeratorPicker()"
+                ></button>
+              </div>
+
+              <div formArrayName="moderatorIds" class="space-y-2">
+                <div
+                  *ngFor="let moderatorCtrl of moderatorIdsArray.controls; let i = index"
+                  class="flex items-center gap-3 rounded-xl border border-[#1FBEFF33] bg-[#1FBEFF14] px-4 py-3"
+                >
+                  <img
+                    *ngIf="getModeratorById(moderatorCtrl.value)?.imageUrl"
+                    [src]="getModeratorById(moderatorCtrl.value)?.imageUrl"
+                    [alt]="getModeratorById(moderatorCtrl.value)?.name || 'moderator'"
+                    class="h-9 w-9 rounded-full object-cover"
+                  />
+                  <div class="min-w-0 flex-1">
+                    <p class="m-0 truncate text-sm font-semibold text-[#17364A]">
+                      {{ getModeratorById(moderatorCtrl.value)?.name || moderatorCtrl.value }}
+                    </p>
+                    <p class="m-0 truncate text-xs text-[#17364A80]">
+                      {{ getModeratorById(moderatorCtrl.value)?.imageUrl || '-' }}
+                    </p>
+                  </div>
+                  <button
+                    pButton
+                    type="button"
+                    class="p-button-text p-button-secondary p-button-sm"
+                    icon="pi pi-trash"
+                    (click)="removeModerator(i)"
+                  ></button>
+                </div>
+
+                <p *ngIf="moderatorIdsArray.length === 0" class="m-0 text-sm text-[#17364A80]">
+                  Nu ai adăugat moderatori.
+                </p>
+              </div>
+            </section>
+
+            <section class="space-y-3 rounded-xl border border-[#17364A1A] p-4">
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="m-0 text-sm font-bold text-[#17364A]">Cântăreți / Trupă</h3>
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-sm p-button-outlined"
+                  icon="pi pi-list-check"
+                  [label]="'adminEvents.form.actions.selectExistingPerformers' | translate"
+                  (click)="openPerformerPicker()"
+                ></button>
+              </div>
+
+              <div formArrayName="performerIds" class="space-y-2">
+                <div
+                  *ngFor="let performerCtrl of performerIdsArray.controls; let i = index"
+                  class="flex items-center gap-3 rounded-xl border border-[#ACF88C4D] bg-[#ACF88C14] px-4 py-3"
+                >
+                  <img
+                    *ngIf="getPerformerById(performerCtrl.value)?.imageUrl"
+                    [src]="getPerformerById(performerCtrl.value)?.imageUrl"
+                    [alt]="getPerformerById(performerCtrl.value)?.name || 'performer'"
+                    class="h-9 w-9 rounded-full object-cover"
+                  />
+                  <div class="min-w-0 flex-1">
+                    <p class="m-0 truncate text-sm font-semibold text-[#17364A]">
+                      {{ getPerformerById(performerCtrl.value)?.name || performerCtrl.value }}
+                    </p>
+                    <p class="m-0 truncate text-xs text-[#17364A80]">
+                      {{ getPerformerById(performerCtrl.value)?.imageUrl || '-' }}
+                    </p>
+                  </div>
+                  <button
+                    pButton
+                    type="button"
+                    class="p-button-text p-button-secondary p-button-sm"
+                    icon="pi pi-trash"
+                    (click)="removePerformer(i)"
+                  ></button>
+                </div>
+
+                <p *ngIf="performerIdsArray.length === 0" class="m-0 text-sm text-[#17364A80]">
+                  Nu ai adăugat artiști sau trupe.
+                </p>
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <p-dialog
+          [(visible)]="moderatorPickerVisible"
+          [modal]="true"
+          [draggable]="false"
+          [resizable]="false"
+          [style]="{ width: 'min(92vw, 34rem)' }"
+          [header]="'adminEvents.form.dialogs.moderatorPickerTitle' | translate"
+        >
+          <div class="space-y-3">
+            <p class="m-0 text-sm text-[#17364A99]">
+              {{ 'adminEvents.form.dialogs.moderatorPickerDescription' | translate }}
+            </p>
+
+            <div class="max-h-72 space-y-2 overflow-auto pr-1">
+              <label
+                *ngFor="let moderator of availableModerators"
+                class="flex cursor-pointer items-start gap-3 rounded-lg border border-[#17364A1F] p-3"
+              >
+                <input
+                  type="checkbox"
+                  class="mt-0.5"
+                  [checked]="isAvailableModeratorSelected(moderator.id)"
+                  (change)="
+                    toggleAvailableModeratorSelection(moderator.id, $any($event.target).checked)
+                  "
+                />
+
+                <img
+                  *ngIf="moderator.imageUrl"
+                  [src]="moderator.imageUrl"
+                  [alt]="moderator.name"
+                  class="h-9 w-9 rounded-full object-cover"
+                />
+                <div class="min-w-0">
+                  <p class="m-0 truncate text-sm font-semibold text-[#17364A]">
+                    {{ moderator.name }}
+                  </p>
+                  <p class="m-0 truncate text-xs text-[#17364A80]">
+                    {{ moderator.imageUrl || '-' }}
+                  </p>
+                </div>
+              </label>
+
+              <p *ngIf="availableModerators.length === 0" class="m-0 text-sm text-[#17364A80]">
+                Nu există moderatori disponibili momentan.
+              </p>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+              <button
+                pButton
+                type="button"
+                class="p-button-sm p-button-outlined"
+                [label]="'adminEvents.actions.cancel' | translate"
+                (click)="closeModeratorPicker()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                class="p-button-sm"
+                [label]="'adminEvents.form.actions.addSelectedModerators' | translate"
+                (click)="addSelectedModeratorsToList()"
+              ></button>
+            </div>
+          </div>
+        </p-dialog>
+
+        <p-dialog
+          [(visible)]="performerPickerVisible"
+          [modal]="true"
+          [draggable]="false"
+          [resizable]="false"
+          [style]="{ width: 'min(92vw, 34rem)' }"
+          [header]="'adminEvents.form.dialogs.performerPickerTitle' | translate"
+        >
+          <div class="space-y-3">
+            <p class="m-0 text-sm text-[#17364A99]">
+              {{ 'adminEvents.form.dialogs.performerPickerDescription' | translate }}
+            </p>
+
+            <div class="max-h-72 space-y-2 overflow-auto pr-1">
+              <label
+                *ngFor="let performer of availablePerformers"
+                class="flex cursor-pointer items-start gap-3 rounded-lg border border-[#17364A1F] p-3"
+              >
+                <input
+                  type="checkbox"
+                  class="mt-0.5"
+                  [checked]="isAvailablePerformerSelected(performer.id)"
+                  (change)="
+                    toggleAvailablePerformerSelection(performer.id, $any($event.target).checked)
+                  "
+                />
+
+                <img
+                  *ngIf="performer.imageUrl"
+                  [src]="performer.imageUrl"
+                  [alt]="performer.name"
+                  class="h-9 w-9 rounded-full object-cover"
+                />
+                <div class="min-w-0">
+                  <p class="m-0 truncate text-sm font-semibold text-[#17364A]">
+                    {{ performer.name }}
+                  </p>
+                  <p class="m-0 truncate text-xs text-[#17364A80]">
+                    {{ performer.imageUrl || '-' }}
+                  </p>
+                </div>
+              </label>
+
+              <p *ngIf="availablePerformers.length === 0" class="m-0 text-sm text-[#17364A80]">
+                Nu există artiști disponibili momentan.
+              </p>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+              <button
+                pButton
+                type="button"
+                class="p-button-sm p-button-outlined"
+                [label]="'adminEvents.actions.cancel' | translate"
+                (click)="closePerformerPicker()"
+              ></button>
+              <button
+                pButton
+                type="button"
+                class="p-button-sm"
+                [label]="'adminEvents.form.actions.addSelectedPerformers' | translate"
+                (click)="addSelectedPerformersToList()"
+              ></button>
+            </div>
+          </div>
+        </p-dialog>
+
+        <div class="flex flex-wrap justify-end gap-3 pb-5">
+          <button
+            pButton
+            type="button"
+            class="p-button-outlined"
+            [label]="'adminEvents.actions.cancel' | translate"
+            (click)="cancel()"
+          ></button>
+          <button
+            pButton
+            type="submit"
+            icon="pi pi-save"
+            [label]="'adminEvents.actions.save' | translate"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>

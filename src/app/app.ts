@@ -1,12 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { DrawerModule } from 'primeng/drawer';
 
 @Component({
   selector: 'app-root',
-  imports: [ButtonModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, DrawerModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('PrimeNG is working');
 }

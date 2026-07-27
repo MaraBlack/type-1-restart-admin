@@ -1,0 +1,132 @@
+<p-table
+  [value]="events ?? []"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [rowHover]="true"
+  responsiveLayout="scroll"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>{{ 'adminEvents.table.title' | translate }}</th>
+      <th>{{ 'adminEvents.table.category' | translate }}</th>
+      <th>{{ 'adminEvents.table.status' | translate }}</th>
+      <th class="flex justify-center">{{ 'adminEvents.table.actions' | translate }}</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-event>
+    <tr>
+      <td [ngClass]="{ 'bg-gray-50': isDraft(event) }">
+        <div class="flex items-center gap-3">
+          <ng-container *ngIf="event.coverImageUrl; else fallbackIcon">
+            <img
+              [src]="event.coverImageUrl"
+              [alt]="event.title.ro"
+              width="44"
+              height="44"
+              class="h-11 w-11 shrink-0 rounded-lg object-cover"
+            />
+          </ng-container>
+          <ng-template #fallbackIcon>
+            <div class="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-(--p-surface-200)">
+              <i class="pi pi-image text-base"></i>
+            </div>
+          </ng-template>
+
+          <div class="grid min-w-0 gap-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <strong>{{ event.title.ro }}</strong>
+            </div>
+            <div class="flex gap-2">
+              <span class="text-sm">{{ formatDate(event.startDate) }}</span>
+              <span class="text-sm">/</span>
+              <span class="text-sm">{{ event.city ? event.city : event.type }}</span>
+            </div>
+            <!-- <small class="opacity-75">{{ event.slug }}</small> -->
+          </div>
+        </div>
+      </td>
+
+      <td [ngClass]="{ 'bg-gray-50': isDraft(event) }">
+        {{ 'adminEvents.categories.' + event.category | translate }}
+      </td>
+
+      <td [ngClass]="{ 'bg-gray-50': isDraft(event) }">
+        <p-tag
+          [severity]="statusSeverity(event.status)"
+          [value]="'adminEvents.status.' + event.status | translate"
+        ></p-tag>
+      </td>
+
+      <td [ngClass]="{ 'bg-gray-50': isDraft(event) }">
+        <div class="flex flex-wrap justify-center gap-2">
+          <button
+            *ngIf="isPublished(event); else publishButton"
+            pButton
+            type="button"
+            class="p-button-text p-button-sm"
+            icon="pi pi-ban"
+            [pTooltip]="'adminEvents.actions.unpublish' | translate"
+            tooltipPosition="top"
+            (click)="unpublish.emit(event)"
+          ></button>
+
+          <ng-template #publishButton>
+            <button
+              pButton
+              type="button"
+              class="p-button-text p-button-sm"
+              icon="pi pi-check-circle"
+              [pTooltip]="'adminEvents.actions.publish' | translate"
+              tooltipPosition="top"
+              (click)="publish.emit(event)"
+            ></button>
+          </ng-template>
+
+          <button
+            pButton
+            type="button"
+            class="p-button-text p-button-sm"
+            icon="pi pi-eye"
+            [pTooltip]="'adminEvents.actions.view' | translate"
+            tooltipPosition="top"
+            (click)="view.emit(event)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            class="p-button-text p-button-sm"
+            icon="pi pi-pencil"
+            [pTooltip]="'adminEvents.actions.edit' | translate"
+            tooltipPosition="top"
+            (click)="edit.emit(event)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            class="p-button-text p-button-sm"
+            severity="danger"
+            icon="pi pi-trash"
+            [pTooltip]="'adminEvents.actions.delete' | translate"
+            tooltipPosition="top"
+            (click)="delete.emit(event)"
+          ></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4">
+        <div class="p-6 text-center opacity-80">
+          <i class="pi pi-calendar"></i>
+          <p>{{ 'adminEvents.table.empty' | translate }}</p>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

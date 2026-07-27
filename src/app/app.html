@@ -1,13 +1,39 @@
-<main class="demo-shell">
-  <section class="demo-card">
-    <p class="eyebrow">PrimeNG test</p>
-    <h1>{{ title() }}</h1>
-    <p class="description">
-      This button comes from PrimeNG and confirms the dependency is wired correctly.
-    </p>
+<div class="app-shell min-h-screen bg-slate-100">
+  <p-drawer
+    [visible]="true"
+    position="left"
+    [modal]="false"
+    [dismissible]="false"
+    [closeOnEscape]="false"
+    [closable]="false"
+    styleClass="app-drawer app-drawer-inset"
+  >
+    <ng-template pTemplate="headless">
+      <aside class="app-drawer-panel">
+        <div class="app-drawer-header">
+          <div class="min-w-0">
+            <p class="m-0 text-xs font-extrabold uppercase tracking-[0.14em] text-white/70">
+              Admin
+            </p>
+          </div>
+        </div>
 
-    <div class="actions">
-      <p-button label="PrimeNG Button" icon="pi pi-check"></p-button>
-    </div>
+        <nav class="space-y-2">
+          <a routerLink="/events" routerLinkActive="is-active" class="app-nav-link">
+            <i class="pi pi-calendar text-base"></i>
+            <span>Events</span>
+          </a>
+
+          <a routerLink="/manage-entities" routerLinkActive="is-active" class="app-nav-link">
+            <i class="pi pi-database text-base"></i>
+            <span>Manage Entities</span>
+          </a>
+        </nav>
+      </aside>
+    </ng-template>
+  </p-drawer>
+
+  <section class="app-content min-w-0">
+    <router-outlet></router-outlet>
   </section>
-</main>
+</div>

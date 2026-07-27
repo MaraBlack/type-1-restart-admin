@@ -1,0 +1,119 @@
+{
+  "adminEvents": {
+    "page": {
+      "eyebrow": "Administrare evenimente",
+      "title": "Evenimente",
+      "description": "Gestionează evenimentele din admin cu date mock, iar mai târziu poți înlocui serviciile fără să schimbi pagina."
+    },
+    "stats": {
+      "total": "Total",
+      "published": "Publicate",
+      "draft": "Ne-publicate",
+      "upcoming": "Următoare"
+    },
+    "table": {
+      "title": "Titlu",
+      "category": "Categorie",
+      "status": "Status",
+      "date": "Dată",
+      "city": "Oraș",
+      "actions": "Acțiuni",
+      "empty": "Nu există evenimente în listă."
+    },
+    "labels": {
+      "featured": "Recomandat"
+    },
+    "categories": {
+      "conference": "Conferință",
+      "workshop": "Atelier",
+      "webinar": "Webinar",
+      "campaign": "Campanie",
+      "community": "Comunitate",
+      "fundraising": "Strângere de fonduri",
+      "other": "Altceva"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Publicat",
+      "archived": "Arhivat"
+    },
+    "actions": {
+      "create": "Creează eveniment",
+      "view": "Vizualizează",
+      "edit": "Editează",
+      "publish": "Publică",
+      "unpublish": "Retrage",
+      "delete": "Șterge",
+      "save": "Salvează",
+      "cancel": "Renunță",
+      "backToList": "Înapoi la listă"
+    },
+    "form": {
+      "eyebrow": "Formular eveniment",
+      "createTitle": "Creează eveniment",
+      "editTitle": "Editează eveniment",
+      "description": "Completează datele de bază acum; sponsori, imagini și câmpuri suplimentare pot fi adăugate ulterior fără să schimbi structura paginii.",
+      "note": "Sponsorizările și imaginea de cover sunt gestionate separat în servicii, ca să poți lega ulterior API-ul real fără refactor în UI.",
+      "hints": {
+        "slug": "Slug-ul va fi folosit în URL-ul public al evenimentului (ex: /event/slug).",
+        "languageToggle": "Completează titlul și descrierile în ambele limbi (RO și EN)."
+      },
+      "fields": {
+        "slug": "Slug",
+        "category": "Categorie",
+        "titleRo": "Titlu RO",
+        "titleEn": "Titlu EN",
+        "shortDescriptionRo": "Descriere scurtă RO",
+        "shortDescriptionEn": "Descriere scurtă EN",
+        "descriptionRo": "Descriere RO",
+        "descriptionEn": "Descriere EN",
+        "startDate": "Dată început",
+        "endDate": "Dată final",
+        "startTime": "Oră început",
+        "endTime": "Oră final",
+        "locationType": "Tip eveniment",
+        "city": "Oraș",
+        "locationName": "Nume locație",
+        "address": "Adresă",
+        "country": "Țară",
+        "ticketingUrl": "Link ticketing",
+        "googleMapsUrl": "Link Google Maps",
+        "status": "Status",
+        "registrationUrl": "URL înregistrare",
+        "coverImageUrl": "URL imagine cover",
+        "sponsorName": "Nume sponsor",
+        "sponsorLogoUrl": "URL imagine/logo",
+        "sponsorWebsiteUrl": "Website",
+        "closingBand": "Trupa de final (opțional)",
+        "closingBandPlaceholder": "Ex: The Mono Jacks",
+        "isFeatured": "Marchează ca recomandat"
+      },
+      "location": {
+        "offline": "Eveniment fizic",
+        "online": "Eveniment online"
+      },
+      "sections": {
+        "sponsors": "Sponsori și parteneri",
+        "sponsorItem": "Sponsor",
+        "noSponsors": "Nu ai adăugat încă sponsori sau parteneri."
+      },
+      "actions": {
+        "addSponsor": "Adaugă sponsor",
+        "selectExistingSponsors": "Selectează din sponsori existenți",
+        "addSelectedSponsors": "Adaugă selecția",
+        "selectExistingModerators": "Selectează moderatori existenți",
+        "addSelectedModerators": "Adaugă moderatorii selectați",
+        "selectExistingPerformers": "Selectează artiști existenți",
+        "addSelectedPerformers": "Adaugă artiștii selectați"
+      },
+      "dialogs": {
+        "sponsorPickerTitle": "Sponsori existenți",
+        "sponsorPickerDescription": "Selectează sponsorii existenți pe care vrei să îi adaugi la eveniment.",
+        "moderatorPickerTitle": "Moderatori existenți",
+        "moderatorPickerDescription": "Selectează moderatorii existenți pe care vrei să îi adaugi la eveniment.",
+        "performerPickerTitle": "Artiști / Trupe existente",
+        "performerPickerDescription": "Selectează artiștii sau trupele existente pe care vrei să îi adaugi la eveniment."
+      }
+    }
+  }
+}
