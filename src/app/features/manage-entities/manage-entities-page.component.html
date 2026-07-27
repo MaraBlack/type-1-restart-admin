@@ -22,12 +22,10 @@
 
         <p-tabpanels>
           <p-tabpanel value="sponsors">
-            <article
-              class="space-y-4 overflow-hidden rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm"
-            >
-              <h2 class="m-0 text-lg font-extrabold text-[#17364A]">Sponsors CRUD</h2>
+            <article class="space-y-4 overflow-hidden bg-white p-5">
+              <h2 class="m-0 text-lg font-extrabold text-[#17364A] mb-4">Sponsors CRUD</h2>
 
-              <div class="grid gap-3 md:grid-cols-4">
+              <div class="mt-2 grid gap-3 md:grid-cols-4">
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
                   type="text"
@@ -36,18 +34,19 @@
                   [ngModelOptions]="{ standalone: true }"
                 />
                 <input
-                  class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  class="rounded-xl border border-[#17364A26] px-3 py-3"
                   type="url"
                   placeholder="Website URL"
                   [(ngModel)]="sponsorDraft.websiteUrl"
                   [ngModelOptions]="{ standalone: true }"
                 />
-                <p-select
-                  class="w-full"
-                  [(ngModel)]="sponsorDraft.type"
+                <input
+                  class="rounded-xl border border-[#17364A26] px-3 py-3"
+                  type="url"
+                  placeholder="Logo/Image URL"
+                  [(ngModel)]="sponsorDraft.logoImageURL"
                   [ngModelOptions]="{ standalone: true }"
-                  [options]="sponsorTypeOptions"
-                ></p-select>
+                />
                 <button
                   pButton
                   type="button"
@@ -58,17 +57,25 @@
               </div>
 
               <div class="space-y-3" *ngIf="sponsors$ | async as sponsors">
-                <div *ngFor="let item of sponsors" class="rounded-xl border border-[#17364A1A] p-4">
+                <div *ngFor="let item of sponsors" class="rounded-xl p-4">
                   <div
                     *ngIf="!isEditingSponsor(item.id)"
                     class="flex flex-wrap items-start justify-between gap-3"
                   >
-                    <div class="space-y-1">
-                      <p class="m-0 text-sm font-bold text-[#17364A]">{{ item.name }}</p>
-                      <p class="m-0 text-xs text-[#17364A99]">{{ item.websiteUrl || '-' }}</p>
-                      <p class="m-0 text-xs text-[#17364A80]">{{ item.type }}</p>
+                    <div class="flex min-w-0 items-center gap-3">
+                      <img
+                        *ngIf="item.logoImageURL"
+                        [src]="item.logoImageURL"
+                        [alt]="item.name"
+                        class="h-10 w-10 rounded-full object-cover"
+                      />
+                      <div class="space-y-1">
+                        <p class="m-0 text-sm font-bold text-[#17364A]">{{ item.name }}</p>
+                        <p class="m-0 text-xs text-[#17364A99]">{{ item.websiteUrl || '-' }}</p>
+                        <p class="m-0 text-xs text-[#17364A80]">{{ item.logoImageURL || '-' }}</p>
+                      </div>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex items-end gap-2">
                       <button
                         pButton
                         type="button"
@@ -99,13 +106,13 @@
                       [(ngModel)]="sponsorEditDraft.websiteUrl"
                       [ngModelOptions]="{ standalone: true }"
                     />
-                    <p-select
-                      class="w-full"
-                      [(ngModel)]="sponsorEditDraft.type"
+                    <input
+                      class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                      type="url"
+                      [(ngModel)]="sponsorEditDraft.logoImageURL"
                       [ngModelOptions]="{ standalone: true }"
-                      [options]="sponsorTypeOptions"
-                    ></p-select>
-                    <div class="flex gap-2">
+                    />
+                    <div class="flex ml-auto gap-2">
                       <button
                         pButton
                         type="button"
@@ -128,12 +135,10 @@
           </p-tabpanel>
 
           <p-tabpanel value="moderators">
-            <article
-              class="space-y-4 overflow-hidden rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm"
-            >
-              <h2 class="m-0 text-lg font-extrabold text-[#17364A]">Moderators CRUD</h2>
+            <article class="space-y-4 overflow-hidden bg-white p-5">
+              <h2 class="m-0 text-lg font-extrabold text-[#17364A] mb-4">Moderators CRUD</h2>
 
-              <div class="grid gap-3 md:grid-cols-3">
+              <div class="mt-2 grid gap-3 md:grid-cols-3">
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
                   type="text"
@@ -158,10 +163,7 @@
               </div>
 
               <div class="space-y-3" *ngIf="moderators$ | async as moderators">
-                <div
-                  *ngFor="let item of moderators"
-                  class="rounded-xl border border-[#17364A1A] p-4"
-                >
+                <div *ngFor="let item of moderators" class="rounded-xl p-4">
                   <div
                     *ngIf="!isEditingModerator(item.id)"
                     class="flex flex-wrap items-start justify-between gap-3"
@@ -209,7 +211,7 @@
                       [(ngModel)]="moderatorEditDraft.imageUrl"
                       [ngModelOptions]="{ standalone: true }"
                     />
-                    <div class="flex gap-2">
+                    <div class="flex ml-auto gap-2">
                       <button
                         pButton
                         type="button"
@@ -232,12 +234,10 @@
           </p-tabpanel>
 
           <p-tabpanel value="performers">
-            <article
-              class="space-y-4 overflow-hidden rounded-2xl border border-[#17364A1A] bg-white p-5 shadow-sm"
-            >
-              <h2 class="m-0 text-lg font-extrabold text-[#17364A]">Performers CRUD</h2>
+            <article class="space-y-4 overflow-hidden bg-white p-5">
+              <h2 class="m-0 text-lg font-extrabold text-[#17364A] mb-4">Performers CRUD</h2>
 
-              <div class="grid gap-3 md:grid-cols-4">
+              <div class="mt-2 grid gap-3 md:grid-cols-4">
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
                   type="text"
@@ -269,10 +269,7 @@
               </div>
 
               <div class="space-y-3" *ngIf="performers$ | async as performers">
-                <div
-                  *ngFor="let item of performers"
-                  class="rounded-xl border border-[#17364A1A] p-4"
-                >
+                <div *ngFor="let item of performers" class="rounded-xl p-4">
                   <div
                     *ngIf="!isEditingPerformer(item.id)"
                     class="flex flex-wrap items-start justify-between gap-3"
@@ -327,7 +324,7 @@
                       [(ngModel)]="performerEditDraft.websiteUrl"
                       [ngModelOptions]="{ standalone: true }"
                     />
-                    <div class="flex gap-2">
+                    <div class="flex ml-auto gap-2">
                       <button
                         pButton
                         type="button"

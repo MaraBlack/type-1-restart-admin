@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
 import { TabsModule } from 'primeng/tabs';
 
 import {
@@ -11,8 +10,7 @@ import {
   CreateSponsorRequest,
   Moderator,
   Performer,
-  Sponsor,
-  SponsorType
+  Sponsor
 } from '../../models';
 import { ModeratorsService } from '../../services/moderators.service';
 import { PerformersService } from '../../services/performers.service';
@@ -23,7 +21,7 @@ type EntityTab = 'sponsors' | 'moderators' | 'performers';
 @Component({
   selector: 'app-manage-entities-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, SelectModule, TabsModule],
+  imports: [CommonModule, FormsModule, ButtonModule, TabsModule],
   templateUrl: './manage-entities-page.component.html',
   styleUrl: './manage-entities-page.component.css'
 })
@@ -37,15 +35,9 @@ export class ManageEntitiesPageComponent {
   protected readonly performers$ = this.performersService.getPerformers();
   protected activeTab: EntityTab = 'sponsors';
 
-  protected readonly sponsorTypeOptions: SponsorType[] = [
-    'sponsor',
-    'partner',
-    'mediaPartner',
-    'organizer'
-  ];
-
   protected sponsorDraft: CreateSponsorRequest = {
     name: '',
+    logoImageURL: '',
     websiteUrl: '',
     type: 'sponsor'
   };
@@ -64,6 +56,7 @@ export class ManageEntitiesPageComponent {
   protected editingSponsorId: string | null = null;
   protected sponsorEditDraft: CreateSponsorRequest = {
     name: '',
+    logoImageURL: '',
     websiteUrl: '',
     type: 'sponsor'
   };
@@ -93,12 +86,14 @@ export class ManageEntitiesPageComponent {
     this.sponsorsService
       .createSponsor({
         name: this.sponsorDraft.name,
+        logoImageURL: this.sponsorDraft.logoImageURL,
         websiteUrl: this.sponsorDraft.websiteUrl,
         type: this.sponsorDraft.type
       })
       .subscribe(() => {
         this.sponsorDraft = {
           name: '',
+          logoImageURL: '',
           websiteUrl: '',
           type: 'sponsor'
         };
@@ -109,6 +104,7 @@ export class ManageEntitiesPageComponent {
     this.editingSponsorId = item.id;
     this.sponsorEditDraft = {
       name: item.name,
+      logoImageURL: item.logoImageURL,
       websiteUrl: item.websiteUrl,
       type: item.type
     };

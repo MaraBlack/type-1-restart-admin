@@ -6,7 +6,7 @@ export interface Sponsor {
   id: string;
   name: string;
   slug: string;
-  logoImageId?: string;
+  logoImageURL?: string;
   logoImage?: ImageAsset;
   websiteUrl?: string;
   type: SponsorType;
@@ -16,7 +16,7 @@ export interface Sponsor {
 
 export interface CreateSponsorRequest {
   name: string;
-  logoImageId?: string;
+  logoImageURL?: string;
   websiteUrl?: string;
   type: SponsorType;
 }

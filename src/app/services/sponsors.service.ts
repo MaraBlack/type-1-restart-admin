@@ -28,7 +28,7 @@ export class SponsorsService {
       id: this.generateId('sponsor'),
       name: payload.name.trim(),
       slug: this.slugify(payload.name),
-      logoImageId: payload.logoImageId,
+      logoImageURL: payload.logoImageURL,
       websiteUrl: payload.websiteUrl?.trim() || undefined,
       type: payload.type,
       createdAt: now,

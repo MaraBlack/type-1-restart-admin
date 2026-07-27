@@ -9,6 +9,7 @@ export const MOCK_SPONSORS: Sponsor[] = [
     slug: 'hope-foundation',
     websiteUrl: 'https://example.org',
     type: 'sponsor',
+    logoImageURL: 'https://images.seeklogo.com/logo-png/32/1/medlife-logo-png_seeklogo-320752.png',
     createdAt: now,
     updatedAt: now
   },
