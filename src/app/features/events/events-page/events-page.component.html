@@ -97,4 +97,35 @@
       </section>
     </div>
   </section>
+
+  <p-dialog
+    [(visible)]="confirmationDialogVisible"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="false"
+    [style]="{ width: 'min(92vw, 30rem)' }"
+    header="Confirmare"
+  >
+    <div class="space-y-4">
+      <p class="m-0 text-sm text-[#17364A]">{{ confirmationMessage }}</p>
+
+      <div class="flex justify-end gap-2">
+        <button
+          pButton
+          type="button"
+          class="p-button-sm p-button-outlined"
+          label="Nu"
+          (click)="closeConfirmationDialog()"
+        ></button>
+        <button
+          pButton
+          type="button"
+          class="p-button-sm"
+          label="Da"
+          (click)="confirmAction()"
+        ></button>
+      </div>
+    </div>
+  </p-dialog>
 </main>

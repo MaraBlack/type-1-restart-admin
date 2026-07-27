@@ -35,6 +35,7 @@ export const MOCK_EVENTS: Event[] = [
       googleMapsUrl: 'https://maps.google.com'
     },
     coverImageId: 'img-001',
+    coverImageUrl: 'https://placehold.co/1120x320?text=Future+Impact+Conference',
     socialLinks: {
       instagramUrl: 'https://instagram.com/futureimpactconf',
       facebookUrl: 'https://facebook.com/futureimpactconf',
@@ -68,6 +69,7 @@ export const MOCK_EVENTS: Event[] = [
     schedule: {
       startDate: '2026-10-03',
       startTime: '10:00',
+      endTime: '16:00',
       timezone: 'Europe/Bucharest'
     },
     location: {
@@ -79,6 +81,7 @@ export const MOCK_EVENTS: Event[] = [
       country: 'Romania'
     },
     coverImageId: 'img-002',
+    coverImageUrl: 'https://placehold.co/1120x320?text=Community+Workshop',
     socialLinks: {
       instagramUrl: 'https://instagram.com/communityworkshops',
       xUrl: 'https://x.com/communityworkshop'
@@ -109,6 +112,7 @@ export const MOCK_EVENTS: Event[] = [
     schedule: {
       startDate: '2026-05-21',
       startTime: '18:00',
+      endTime: '20:00',
       timezone: 'Europe/Bucharest'
     },
     location: {
@@ -123,6 +127,9 @@ export const MOCK_EVENTS: Event[] = [
       facebookUrl: 'https://facebook.com/digitalvolunteering'
     },
     sponsorIds: [],
+    moderatorIds: [],
+    performerIds: [],
+    coverImageUrl: 'https://placehold.co/1120x320?text=Digital+Volunteering+Webinar',
     publishedAt: '2026-05-01T10:00:00.000Z',
     createdAt: now,
     updatedAt: now
@@ -146,6 +153,7 @@ export const MOCK_EVENTS: Event[] = [
     schedule: {
       startDate: '2026-08-30',
       startTime: '08:30',
+      endTime: '13:00',
       timezone: 'Europe/Bucharest'
     },
     location: {
@@ -158,6 +166,9 @@ export const MOCK_EVENTS: Event[] = [
       googleMapsUrl: 'https://maps.google.com/?q=Parcul+Central+Iasi'
     },
     sponsorIds: ['sponsor-001'],
+    moderatorIds: [],
+    performerIds: [],
+    coverImageUrl: 'https://placehold.co/1120x320?text=Cleanup+Day',
     isFeatured: false,
     publishedAt: '2026-07-20T09:00:00.000Z',
     createdAt: now,
@@ -180,13 +191,18 @@ export const MOCK_EVENTS: Event[] = [
     category: 'fundraising',
     status: 'draft',
     schedule: {
-      startDate: '2026-11-12'
+      startDate: '2026-11-12',
+      startTime: '09:00',
+      endTime: '12:00'
     },
     location: {
       name: 'TBD',
       type: 'online'
     },
     sponsorIds: [],
+    moderatorIds: [],
+    performerIds: [],
+    coverImageUrl: 'https://placehold.co/1120x320?text=Pilot+Fundraising',
     createdAt: now,
     updatedAt: now
   }

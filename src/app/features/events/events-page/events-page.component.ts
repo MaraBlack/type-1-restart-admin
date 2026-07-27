@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 
 
 import { EventsService } from '../../../services/events.service';
@@ -14,7 +15,7 @@ import { EventsTableSectionComponent } from '../components/events-table-section.
 @Component({
   selector: 'app-events-page',
   standalone: true,
-  imports: [CommonModule, ButtonModule, TranslatePipe, EventsTableSectionComponent],
+  imports: [CommonModule, ButtonModule, DialogModule, TranslatePipe, EventsTableSectionComponent],
   templateUrl: './events-page.component.html',
   styleUrls: ['./events-page.component.css']
 })
@@ -24,6 +25,10 @@ export class EventsPageComponent {
 
   protected readonly events$ = this.eventsService.getEvents();
   protected readonly stats$ = this.eventsService.getStats();
+  protected confirmationDialogVisible = false;
+  protected confirmationMessage = '';
+
+  private pendingAction: (() => void) | null = null;
 
   protected createEvent(): void {
     this.router.navigate(['/events/new']);
@@ -42,20 +47,38 @@ export class EventsPageComponent {
   }
 
   protected deleteEvent(event: EventListItem): void {
-    const shouldDelete = window.confirm(`Delete "${event.title.ro}"?`);
-
-    if (!shouldDelete) {
-      return;
-    }
-
-    this.eventsService.deleteEvent(event.id).subscribe();
+    this.openConfirmationDialog('stergi acest eveniment', () => {
+      this.eventsService.deleteEvent(event.id).subscribe();
+    });
   }
 
   protected publishEvent(event: EventListItem): void {
-    this.eventsService.publishEvent(event.id).subscribe();
+    this.openConfirmationDialog('publici acest eveniment', () => {
+      this.eventsService.publishEvent(event.id).subscribe();
+    });
   }
 
   protected unpublishEvent(event: EventListItem): void {
-    this.eventsService.unpublishEvent(event.id).subscribe();
+    this.openConfirmationDialog('faci unpublish la acest eveniment', () => {
+      this.eventsService.unpublishEvent(event.id).subscribe();
+    });
+  }
+
+  protected closeConfirmationDialog(): void {
+    this.confirmationDialogVisible = false;
+    this.pendingAction = null;
+  }
+
+  protected confirmAction(): void {
+    const action = this.pendingAction;
+
+    this.closeConfirmationDialog();
+    action?.();
+  }
+
+  private openConfirmationDialog(actionLabel: string, action: () => void): void {
+    this.confirmationMessage = `Esti sigur ca vrei sa ${actionLabel}?`;
+    this.pendingAction = action;
+    this.confirmationDialogVisible = true;
   }
 }

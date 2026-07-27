@@ -47,8 +47,8 @@ export interface EventLocation {
 export interface EventSchedule {
   startDate: string;
   endDate?: string;
-  startTime?: string;
-  endTime?: string;
+  startTime: string;
+  endTime: string;
   timezone?: string;
 }
 
@@ -62,13 +62,13 @@ export interface Event {
   schedule: EventSchedule;
   location: EventLocation;
   coverImageId?: string;
-  coverImageUrl?: string;
+  coverImageUrl: string;
   coverImage?: ImageAsset;
   socialLinks?: EventSocialLinks;
   sponsorIds: string[];
   partners?: EventPartner[];
-  moderatorIds?: string[];
-  performerIds?: string[];
+  moderatorIds: string[];
+  performerIds: string[];
   sponsors?: Sponsor[];
   isFeatured?: boolean;
   registrationUrl?: string;
@@ -108,11 +108,11 @@ export interface CreateEventRequest {
   schedule: EventSchedule;
   location: EventLocation;
   coverImageId?: string;
-  coverImageUrl?: string;
+  coverImageUrl: string;
   socialLinks?: EventSocialLinks;
   sponsorIds: string[];
   partners?: EventPartner[];
-  moderatorIds?: string[];
+  moderatorIds: string[];
   performerIds?: string[];
   isFeatured?: boolean;
   registrationUrl?: string;

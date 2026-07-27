@@ -22,6 +22,13 @@
       </a>
 
       <form [formGroup]="form" class="mt-6 space-y-6" (ngSubmit)="save()">
+        <div
+          class="rounded-xl border border-[#17364A1F] bg-white px-4 py-3 text-xs text-[#17364A99]"
+        >
+          Campurile marcate cu * sunt mandatory field. Pentru linkuri foloseste format valid, de
+          exemplu https://exemplu.ro.
+        </div>
+
         <article
           *ngIf="isEditMode && form.controls.status.value === 'published'"
           class="rounded-2xl border border-[#53F1B559] bg-[#53F1B51A] p-4"
@@ -61,10 +68,15 @@
 
           <div class="grid grid-cols-1 gap-4 p-5 md:grid-cols-2">
             <label class="grid gap-1.5">
-              <span class="text-sm font-bold text-[#17364A]">{{
-                'adminEvents.form.fields.category' | translate
-              }}</span>
-              <p-select class="w-full" formControlName="category" [options]="categoryOptions">
+              <span class="text-sm font-bold text-[#17364A]"
+                >{{ 'adminEvents.form.fields.category' | translate }} *</span
+              >
+              <p-select
+                [styleClass]="isControlInvalid('category') ? 'w-full p-invalid' : 'w-full'"
+                [ngClass]="{ 'border-red-500': isControlInvalid('startDate') }"
+                formControlName="category"
+                [options]="categoryOptions"
+              >
                 <ng-template #selectedItem let-category>
                   {{ 'adminEvents.categories.' + category | translate }}
                 </ng-template>
@@ -72,13 +84,20 @@
                   {{ 'adminEvents.categories.' + category | translate }}
                 </ng-template>
               </p-select>
+              <small *ngIf="getControlHint('category', 'Category')" class="text-xs text-red-500">
+                {{ getControlHint('category', 'Category') }}
+              </small>
             </label>
 
             <label class="grid gap-1.5">
-              <span class="text-sm font-bold text-[#17364A]">{{
-                'adminEvents.form.fields.status' | translate
-              }}</span>
-              <p-select class="w-full" formControlName="status" [options]="statusOptions">
+              <span class="text-sm font-bold text-[#17364A]"
+                >{{ 'adminEvents.form.fields.status' | translate }} *</span
+              >
+              <p-select
+                [styleClass]="isControlInvalid('status') ? 'w-full p-invalid' : 'w-full'"
+                formControlName="status"
+                [options]="statusOptions"
+              >
                 <ng-template #selectedItem let-status>
                   {{ 'adminEvents.status.' + status | translate }}
                 </ng-template>
@@ -86,6 +105,9 @@
                   {{ 'adminEvents.status.' + status | translate }}
                 </ng-template>
               </p-select>
+              <small *ngIf="getControlHint('status', 'Status')" class="text-xs text-red-500">
+                {{ getControlHint('status', 'Status') }}
+              </small>
             </label>
 
             <div class="md:col-span-2">
@@ -118,71 +140,107 @@
 
             <ng-container *ngIf="activeMainInfoLang === 'ro'; else englishMainInfoFields">
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.titleRo' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.titleRo' | translate }} *</span
+                >
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('titleRo') }"
                   type="text"
                   formControlName="titleRo"
                 />
+                <small *ngIf="getControlHint('titleRo', 'Titlu RO')" class="text-xs text-red-500">
+                  {{ getControlHint('titleRo', 'Titlu RO') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.shortDescriptionRo' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.shortDescriptionRo' | translate }} *</span
+                >
                 <textarea
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('shortDescriptionRo') }"
                   rows="3"
                   formControlName="shortDescriptionRo"
                 ></textarea>
+                <small
+                  *ngIf="getControlHint('shortDescriptionRo', 'Descriere scurta RO')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('shortDescriptionRo', 'Descriere scurta RO') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.descriptionRo' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.descriptionRo' | translate }} *</span
+                >
                 <textarea
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('descriptionRo') }"
                   rows="5"
                   formControlName="descriptionRo"
                 ></textarea>
+                <small
+                  *ngIf="getControlHint('descriptionRo', 'Descriere RO')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('descriptionRo', 'Descriere RO') }}
+                </small>
               </label>
             </ng-container>
 
             <ng-template #englishMainInfoFields>
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.titleEn' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.titleEn' | translate }} *</span
+                >
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('titleEn') }"
                   type="text"
                   formControlName="titleEn"
                 />
+                <small *ngIf="getControlHint('titleEn', 'Titlu EN')" class="text-xs text-red-500">
+                  {{ getControlHint('titleEn', 'Titlu EN') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.shortDescriptionEn' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.shortDescriptionEn' | translate }} *</span
+                >
                 <textarea
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('shortDescriptionEn') }"
                   rows="3"
                   formControlName="shortDescriptionEn"
                 ></textarea>
+                <small
+                  *ngIf="getControlHint('shortDescriptionEn', 'Descriere scurta EN')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('shortDescriptionEn', 'Descriere scurta EN') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.descriptionEn' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.descriptionEn' | translate }} *</span
+                >
                 <textarea
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('descriptionEn') }"
                   rows="4"
                   formControlName="descriptionEn"
                 ></textarea>
+                <small
+                  *ngIf="getControlHint('descriptionEn', 'Descriere EN')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('descriptionEn', 'Descriere EN') }}
+                </small>
               </label>
             </ng-template>
           </div>
@@ -195,14 +253,20 @@
 
           <div class="grid grid-cols-1 gap-4 p-5 md:grid-cols-2">
             <label class="grid gap-1.5">
-              <span class="text-sm font-bold text-[#17364A]">{{
-                'adminEvents.form.fields.startDate' | translate
-              }}</span>
+              <span class="text-sm font-bold text-[#17364A]"
+                >{{ 'adminEvents.form.fields.startDate' | translate }} *</span
+              >
               <input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
                 type="date"
                 formControlName="startDate"
               />
+              <small
+                *ngIf="getControlHint('startDate', 'Data de start')"
+                class="text-xs text-red-500"
+              >
+                {{ getControlHint('startDate', 'Data de start') }}
+              </small>
             </label>
 
             <label class="grid gap-1.5">
@@ -217,25 +281,36 @@
             </label>
 
             <label class="grid gap-1.5">
-              <span class="text-sm font-bold text-[#17364A]">{{
-                'adminEvents.form.fields.startTime' | translate
-              }}</span>
+              <span class="text-sm font-bold text-[#17364A]"
+                >{{ 'adminEvents.form.fields.startTime' | translate }} *</span
+              >
               <input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('startTime') }"
                 type="time"
                 formControlName="startTime"
               />
+              <small
+                *ngIf="getControlHint('startTime', 'Ora de inceput')"
+                class="text-xs text-red-500"
+              >
+                {{ getControlHint('startTime', 'Ora de inceput') }}
+              </small>
             </label>
 
             <label class="grid gap-1.5">
-              <span class="text-sm font-bold text-[#17364A]">{{
-                'adminEvents.form.fields.endTime' | translate
-              }}</span>
+              <span class="text-sm font-bold text-[#17364A]"
+                >{{ 'adminEvents.form.fields.endTime' | translate }} *</span
+              >
               <input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('endTime') }"
                 type="time"
                 formControlName="endTime"
               />
+              <small *ngIf="getControlHint('endTime', 'Ora de final')" class="text-xs text-red-500">
+                {{ getControlHint('endTime', 'Ora de final') }}
+              </small>
             </label>
 
             <div class="md:col-span-2">
@@ -272,14 +347,21 @@
 
             <ng-container *ngIf="isOnlineEvent; else offlineFields">
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.ticketingUrl' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.ticketingUrl' | translate }} *</span
+                >
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('ticketingUrl') }"
                   type="url"
                   formControlName="ticketingUrl"
                 />
+                <small
+                  *ngIf="getControlHint('ticketingUrl', 'Ticketing URL')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('ticketingUrl', 'Ticketing URL') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5 md:col-span-2">
@@ -288,55 +370,81 @@
                 }}</span>
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('registrationUrl') }"
                   type="url"
                   formControlName="registrationUrl"
                 />
+                <small
+                  *ngIf="getControlHint('registrationUrl', 'Registration URL')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('registrationUrl', 'Registration URL') }}
+                </small>
               </label>
             </ng-container>
 
             <ng-template #offlineFields>
               <label class="grid gap-1.5">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.locationName' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.locationName' | translate }} *</span
+                >
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('locationName') }"
                   type="text"
                   formControlName="locationName"
                 />
+                <small
+                  *ngIf="getControlHint('locationName', 'Nume locatie')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('locationName', 'Nume locatie') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.city' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.city' | translate }} *</span
+                >
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('city') }"
                   type="text"
                   formControlName="city"
                 />
+                <small *ngIf="getControlHint('city', 'Oras')" class="text-xs text-red-500">
+                  {{ getControlHint('city', 'Oras') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5 md:col-span-2">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.address' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.address' | translate }} *</span
+                >
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('address') }"
                   type="text"
                   formControlName="address"
                 />
+                <small *ngIf="getControlHint('address', 'Adresa')" class="text-xs text-red-500">
+                  {{ getControlHint('address', 'Adresa') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5">
-                <span class="text-sm font-bold text-[#17364A]">{{
-                  'adminEvents.form.fields.country' | translate
-                }}</span>
+                <span class="text-sm font-bold text-[#17364A]"
+                  >{{ 'adminEvents.form.fields.country' | translate }} *</span
+                >
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('country') }"
                   type="text"
                   formControlName="country"
                 />
+                <small *ngIf="getControlHint('country', 'Tara')" class="text-xs text-red-500">
+                  {{ getControlHint('country', 'Tara') }}
+                </small>
               </label>
 
               <label class="grid gap-1.5">
@@ -345,9 +453,16 @@
                 }}</span>
                 <input
                   class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                  [ngClass]="{ 'border-red-500': isControlInvalid('googleMapsUrl') }"
                   type="url"
                   formControlName="googleMapsUrl"
                 />
+                <small
+                  *ngIf="getControlHint('googleMapsUrl', 'Google Maps URL')"
+                  class="text-xs text-red-500"
+                >
+                  {{ getControlHint('googleMapsUrl', 'Google Maps URL') }}
+                </small>
               </label>
             </ng-template>
           </div>
@@ -372,14 +487,21 @@
             ></p-fileupload>
 
             <label class="grid gap-1.5">
-              <span class="text-sm font-bold text-[#17364A]">{{
-                'adminEvents.form.fields.coverImageUrl' | translate
-              }}</span>
+              <span class="text-sm font-bold text-[#17364A]"
+                >{{ 'adminEvents.form.fields.coverImageUrl' | translate }} *</span
+              >
               <input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('coverImageUrl') }"
                 type="url"
                 formControlName="coverImageUrl"
               />
+              <small
+                *ngIf="getControlHint('coverImageUrl', 'Cover Image URL')"
+                class="text-xs text-red-500"
+              >
+                {{ getControlHint('coverImageUrl', 'Cover Image URL') }}
+              </small>
             </label>
 
             <div
@@ -405,37 +527,74 @@
               ><span class="text-sm font-bold text-[#17364A]">Instagram URL</span
               ><input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('instagramUrl') }"
                 type="url"
                 formControlName="instagramUrl"
-            /></label>
+              />
+              <small
+                *ngIf="getControlHint('instagramUrl', 'Instagram URL')"
+                class="text-xs text-red-500"
+              >
+                {{ getControlHint('instagramUrl', 'Instagram URL') }}
+              </small></label
+            >
             <label class="grid gap-1.5"
               ><span class="text-sm font-bold text-[#17364A]">Facebook URL</span
               ><input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('facebookUrl') }"
                 type="url"
                 formControlName="facebookUrl"
-            /></label>
+              />
+              <small
+                *ngIf="getControlHint('facebookUrl', 'Facebook URL')"
+                class="text-xs text-red-500"
+              >
+                {{ getControlHint('facebookUrl', 'Facebook URL') }}
+              </small></label
+            >
             <label class="grid gap-1.5"
               ><span class="text-sm font-bold text-[#17364A]">X URL</span
               ><input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('xUrl') }"
                 type="url"
                 formControlName="xUrl"
-            /></label>
+              />
+              <small *ngIf="getControlHint('xUrl', 'X URL')" class="text-xs text-red-500">
+                {{ getControlHint('xUrl', 'X URL') }}
+              </small></label
+            >
             <label class="grid gap-1.5"
               ><span class="text-sm font-bold text-[#17364A]">Youtube URL</span
               ><input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('youtubeUrl') }"
                 type="url"
                 formControlName="youtubeUrl"
-            /></label>
+              />
+              <small
+                *ngIf="getControlHint('youtubeUrl', 'YouTube URL')"
+                class="text-xs text-red-500"
+              >
+                {{ getControlHint('youtubeUrl', 'YouTube URL') }}
+              </small></label
+            >
             <label class="grid gap-1.5 md:col-span-2"
               ><span class="text-sm font-bold text-[#17364A]">LinkedIn URL</span
               ><input
                 class="rounded-xl border border-[#17364A26] px-3 py-2.5"
+                [ngClass]="{ 'border-red-500': isControlInvalid('linkedinUrl') }"
                 type="url"
                 formControlName="linkedinUrl"
-            /></label>
+              />
+              <small
+                *ngIf="getControlHint('linkedinUrl', 'LinkedIn URL')"
+                class="text-xs text-red-500"
+              >
+                {{ getControlHint('linkedinUrl', 'LinkedIn URL') }}
+              </small></label
+            >
           </div>
         </article>
 
@@ -447,65 +606,15 @@
           </div>
 
           <div class="space-y-5 p-5">
-            <div class="space-y-3">
-              <div class="flex flex-wrap justify-end gap-2">
-                <button
-                  pButton
-                  type="button"
-                  class="p-button-sm p-button-outlined"
-                  icon="pi pi-list-check"
-                  [label]="'adminEvents.form.actions.selectExistingSponsors' | translate"
-                  (click)="openSponsorPicker()"
-                ></button>
-
-                <button
-                  pButton
-                  type="button"
-                  class="p-button-sm border-none bg-[#ACF88C66] text-[#17364A]"
-                  icon="pi pi-plus"
-                  [label]="'adminEvents.form.actions.addSponsor' | translate"
-                  (click)="addSponsor()"
-                ></button>
-              </div>
-
-              <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
-                <label class="grid gap-1.5">
-                  <span class="text-sm font-bold text-[#17364A]">{{
-                    'adminEvents.form.fields.sponsorName' | translate
-                  }}</span>
-                  <input
-                    class="rounded-xl border border-[#17364A26] px-3 py-2.5"
-                    type="text"
-                    [(ngModel)]="sponsorDraft.name"
-                    [ngModelOptions]="{ standalone: true }"
-                    placeholder="Ex: MedLife"
-                  />
-                </label>
-
-                <label class="grid gap-1.5">
-                  <span class="text-sm font-bold text-[#17364A]">{{
-                    'adminEvents.form.fields.sponsorWebsiteUrl' | translate
-                  }}</span>
-                  <input
-                    class="rounded-xl border border-[#17364A26] px-3 py-2.5"
-                    type="url"
-                    [(ngModel)]="sponsorDraft.websiteUrl"
-                    [ngModelOptions]="{ standalone: true }"
-                  />
-                </label>
-
-                <label class="grid gap-1.5">
-                  <span class="text-sm font-bold text-[#17364A]">{{
-                    'adminEvents.form.fields.sponsorLogoUrl' | translate
-                  }}</span>
-                  <input
-                    class="rounded-xl border border-[#17364A26] px-3 py-2.5"
-                    type="url"
-                    [(ngModel)]="sponsorDraft.logoUrl"
-                    [ngModelOptions]="{ standalone: true }"
-                  />
-                </label>
-              </div>
+            <div class="flex flex-wrap justify-end gap-2">
+              <button
+                pButton
+                type="button"
+                class="p-button-sm p-button-outlined"
+                icon="pi pi-list-check"
+                [label]="'adminEvents.form.actions.selectExistingSponsors' | translate"
+                (click)="openSponsorPicker()"
+              ></button>
             </div>
 
             <div formArrayName="sponsors" class="space-y-2">
@@ -613,9 +722,12 @@
           </div>
 
           <div class="grid gap-5 p-5 md:grid-cols-2">
-            <section class="space-y-3 rounded-xl border border-[#17364A1A] p-4">
+            <section
+              class="space-y-3 rounded-xl border border-[#17364A1A] p-4"
+              [ngClass]="{ 'border-red-500': hasModeratorRequiredError() }"
+            >
               <div class="flex items-center justify-between gap-2">
-                <h3 class="m-0 text-sm font-bold text-[#17364A]">Moderatori</h3>
+                <h3 class="m-0 text-sm font-bold text-[#17364A]">Moderatori *</h3>
                 <button
                   pButton
                   type="button"
@@ -656,6 +768,9 @@
 
                 <p *ngIf="moderatorIdsArray.length === 0" class="m-0 text-sm text-[#17364A80]">
                   Nu ai adăugat moderatori.
+                </p>
+                <p *ngIf="hasModeratorRequiredError()" class="m-0 text-xs text-red-500">
+                  Moderator este mandatory field. Adauga cel putin un moderator.
                 </p>
               </div>
             </section>
@@ -843,7 +958,9 @@
           </div>
         </p-dialog>
 
-        <div class="flex flex-wrap justify-end gap-3 pb-5">
+        <div
+          class="sticky bottom-0 z-20 flex flex-wrap justify-end gap-3 border-t border-[#17364A1A] bg-[#F7F8FAE6] px-2 py-3 backdrop-blur"
+        >
           <button
             pButton
             type="button"
@@ -856,6 +973,7 @@
             type="submit"
             icon="pi pi-save"
             [label]="'adminEvents.actions.save' | translate"
+            [disabled]="form.invalid"
           ></button>
         </div>
       </form>

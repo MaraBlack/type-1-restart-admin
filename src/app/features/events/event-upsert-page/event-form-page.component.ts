@@ -1,6 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
@@ -66,7 +75,6 @@ type EventSponsorFormValue = {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     RouterLink,
     ButtonModule,
@@ -112,41 +120,47 @@ export class EventFormPageComponent implements OnInit {
   protected selectedAvailableSponsorIds = new Set<string>();
   protected selectedAvailablePerformers = new Set<string>();
   protected selectedAvailableModerators = new Set<string>();
-  protected sponsorDraft: EventSponsorFormValue = {
-    name: '',
-    logoUrl: '',
-    websiteUrl: ''
+  private readonly optionalUrlValidator: ValidatorFn = (
+    control: AbstractControl<string>
+  ): ValidationErrors | null => {
+    const value = (control.value ?? '').trim();
+
+    if (!value) {
+      return null;
+    }
+
+    return /^(https?:\/\/|blob:).+/i.test(value) ? null : { invalidUrl: true };
   };
 
   protected readonly form = this.fb.nonNullable.group({
     titleRo: ['', Validators.required],
-    titleEn: [''],
+    titleEn: ['', Validators.required],
     shortDescriptionRo: ['', Validators.required],
-    shortDescriptionEn: [''],
+    shortDescriptionEn: ['', Validators.required],
     descriptionRo: ['', Validators.required],
-    descriptionEn: [''],
+    descriptionEn: ['', Validators.required],
     category: ['conference' as EventCategory, Validators.required],
     status: ['draft' as EventStatus, Validators.required],
     locationType: ['offline' as EventLocationType, Validators.required],
     startDate: ['', Validators.required],
-    startTime: [''],
+    startTime: ['', Validators.required],
     endDate: [''],
-    endTime: [''],
+    endTime: ['', Validators.required],
     city: ['', Validators.required],
     locationName: ['', Validators.required],
     address: ['', Validators.required],
     country: ['Romania', Validators.required],
-    ticketingUrl: [''],
-    googleMapsUrl: [''],
-    registrationUrl: [''],
-    coverImageUrl: [''],
-    instagramUrl: [''],
-    facebookUrl: [''],
-    xUrl: [''],
-    youtubeUrl: [''],
-    linkedinUrl: [''],
+    ticketingUrl: ['', this.optionalUrlValidator],
+    googleMapsUrl: ['', this.optionalUrlValidator],
+    registrationUrl: ['', this.optionalUrlValidator],
+    coverImageUrl: ['', [Validators.required, this.optionalUrlValidator]],
+    instagramUrl: ['', this.optionalUrlValidator],
+    facebookUrl: ['', this.optionalUrlValidator],
+    xUrl: ['', this.optionalUrlValidator],
+    youtubeUrl: ['', this.optionalUrlValidator],
+    linkedinUrl: ['', this.optionalUrlValidator],
     sponsors: this.fb.array<FormGroup>([]),
-    moderatorIds: this.fb.array<string>([]),
+    moderatorIds: this.fb.array<string>([], [Validators.minLength(1)]),
     performerIds: this.fb.array<string>([]),
     isFeatured: [false]
   });
@@ -331,27 +345,6 @@ export class EventFormPageComponent implements OnInit {
     return this.availablePerformers.find((performer) => performer.id === id);
   }
 
-  protected addSponsor(): void {
-    const draft = {
-      name: this.sponsorDraft.name.trim(),
-      logoUrl: this.sponsorDraft.logoUrl.trim(),
-      websiteUrl: this.sponsorDraft.websiteUrl.trim()
-    };
-
-    if (!draft.name) {
-      return;
-    }
-
-    this.form.controls.sponsors.push(
-      this.createSponsorGroup(draft.name, draft.logoUrl, draft.websiteUrl)
-    );
-    this.sponsorDraft = {
-      name: '',
-      logoUrl: '',
-      websiteUrl: ''
-    };
-  }
-
   protected removeSponsor(index: number): void {
     this.form.controls.sponsors.removeAt(index);
   }
@@ -427,6 +420,9 @@ export class EventFormPageComponent implements OnInit {
     }
 
     this.selectedImagePreviewUrl = URL.createObjectURL(file);
+    this.form.controls.coverImageUrl.setValue(this.selectedImagePreviewUrl);
+    this.form.controls.coverImageUrl.markAsDirty();
+    this.form.controls.coverImageUrl.updateValueAndValidity();
   }
 
   protected cancel(): void {
@@ -487,14 +483,14 @@ export class EventFormPageComponent implements OnInit {
       status: formValue.status,
       schedule: {
         startDate: formValue.startDate,
-        startTime: formValue.startTime || undefined,
+        startTime: formValue.startTime,
         endDate: formValue.endDate || undefined,
-        endTime: formValue.endTime || undefined
+        endTime: formValue.endTime
       },
       location,
       sponsorIds: [],
       partners,
-      coverImageUrl: formValue.coverImageUrl || this.selectedImagePreviewUrl || undefined,
+      coverImageUrl: formValue.coverImageUrl || this.selectedImagePreviewUrl || '',
       socialLinks: {
         instagramUrl: formValue.instagramUrl || undefined,
         facebookUrl: formValue.facebookUrl || undefined,
@@ -515,6 +511,34 @@ export class EventFormPageComponent implements OnInit {
     request.subscribe(() => {
       void this.router.navigate(['/events']);
     });
+  }
+
+  protected hasControlError(controlName: keyof typeof this.form.controls, errorCode: string): boolean {
+    const control = this.form.controls[controlName];
+
+    return control.hasError(errorCode) && (control.touched || control.dirty);
+  }
+
+  protected getControlHint(controlName: keyof typeof this.form.controls, label: string): string {
+    if (this.hasControlError(controlName, 'required')) {
+      return `${label} este mandatory field.`;
+    }
+
+    if (this.hasControlError(controlName, 'invalidUrl')) {
+      return `${label} trebuie sa fie URL valid (http:// sau https://).`;
+    }
+
+    return '';
+  }
+
+  protected isControlInvalid(controlName: keyof typeof this.form.controls): boolean {
+    const control = this.form.controls[controlName];
+
+    return control.invalid && (control.touched || control.dirty);
+  }
+
+  protected hasModeratorRequiredError(): boolean {
+    return this.moderatorIdsArray.invalid && (this.moderatorIdsArray.touched || this.moderatorIdsArray.dirty);
   }
 
   private toFormValue(event: AdminEvent): Partial<EventFormValue> {
@@ -561,13 +585,13 @@ export class EventFormPageComponent implements OnInit {
 
   private updateLocationValidators(locationType: EventLocationType): void {
     if (locationType === 'online') {
-      this.form.controls.ticketingUrl.setValidators([Validators.required]);
+      this.form.controls.ticketingUrl.setValidators([Validators.required, this.optionalUrlValidator]);
       this.form.controls.address.clearValidators();
       this.form.controls.city.clearValidators();
       this.form.controls.locationName.clearValidators();
       this.form.controls.country.clearValidators();
     } else {
-      this.form.controls.ticketingUrl.clearValidators();
+      this.form.controls.ticketingUrl.setValidators([this.optionalUrlValidator]);
       this.form.controls.address.setValidators([Validators.required]);
       this.form.controls.city.setValidators([Validators.required]);
       this.form.controls.locationName.setValidators([Validators.required]);
@@ -584,8 +608,8 @@ export class EventFormPageComponent implements OnInit {
   private createSponsorGroup(name = '', logoUrl = '', websiteUrl = ''): FormGroup {
     return this.fb.nonNullable.group({
       name: [name],
-      logoUrl: [logoUrl],
-      websiteUrl: [websiteUrl]
+      logoUrl: [logoUrl, this.optionalUrlValidator],
+      websiteUrl: [websiteUrl, this.optionalUrlValidator]
     });
   }
 }
