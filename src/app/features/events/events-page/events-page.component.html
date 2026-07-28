@@ -30,49 +30,67 @@
 
   <section class="px-4 pb-8 pt-7 md:px-6 md:pt-8" *ngIf="stats$ | async as stats">
     <div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <article class="rounded-2xl border border-[#17364A1A] bg-white p-4 shadow-sm">
-          <span
-            class="mb-2 grid h-8 w-8 place-items-center rounded-xl bg-[#FF7B0029] text-[#FF7B00]"
-          >
-            <i class="pi pi-file-edit"></i>
-          </span>
-          <strong class="block text-3xl font-extrabold leading-none text-[#17364A]">{{
-            stats.draft
-          }}</strong>
-          <small class="text-xs text-[#17364A8C]">{{
-            'adminEvents.stats.draft' | translate
-          }}</small>
-        </article>
-
-        <article class="rounded-2xl border border-[#17364A1A] bg-white p-4 shadow-sm">
-          <span
-            class="mb-2 grid h-8 w-8 place-items-center rounded-xl bg-[#53F1B529] text-[#00A86B]"
-          >
-            <i class="pi pi-check-circle"></i>
-          </span>
-          <strong class="block text-3xl font-extrabold leading-none text-[#17364A]">{{
-            stats.published
-          }}</strong>
-          <small class="text-xs text-[#17364A8C]">{{
-            'adminEvents.stats.published' | translate
-          }}</small>
+      <div
+        class="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0"
+      >
+        <article
+          class="min-w-[11rem] snap-start rounded-xl border border-[#17364A1A] bg-white p-3 shadow-sm sm:min-w-0"
+        >
+          <div class="flex items-center gap-3">
+            <span
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#FF7B0029] text-[#FF7B00]"
+            >
+              <i class="pi pi-file-edit text-sm"></i>
+            </span>
+            <div class="min-w-0">
+              <small class="block text-[11px] uppercase tracking-wide text-[#17364A8C]">{{
+                'adminEvents.stats.draft' | translate
+              }}</small>
+              <strong class="block text-2xl font-extrabold leading-none text-[#17364A]">{{
+                stats.draft
+              }}</strong>
+            </div>
+          </div>
         </article>
 
         <article
-          class="rounded-2xl border border-[#17364A1A] bg-white p-4 shadow-sm sm:col-span-2 lg:col-span-1"
+          class="min-w-[11rem] snap-start rounded-xl border border-[#17364A1A] bg-white p-3 shadow-sm sm:min-w-0"
         >
-          <span
-            class="mb-2 grid h-8 w-8 place-items-center rounded-xl bg-[#1FBEFF29] text-[#0B8EC2]"
-          >
-            <i class="pi pi-calendar"></i>
-          </span>
-          <strong class="block text-3xl font-extrabold leading-none text-[#17364A]">{{
-            stats.total
-          }}</strong>
-          <small class="text-xs text-[#17364A8C]">{{
-            'adminEvents.stats.total' | translate
-          }}</small>
+          <div class="flex items-center gap-3">
+            <span
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#53F1B529] text-[#00A86B]"
+            >
+              <i class="pi pi-check-circle text-sm"></i>
+            </span>
+            <div class="min-w-0">
+              <small class="block text-[11px] uppercase tracking-wide text-[#17364A8C]">{{
+                'adminEvents.stats.published' | translate
+              }}</small>
+              <strong class="block text-2xl font-extrabold leading-none text-[#17364A]">{{
+                stats.published
+              }}</strong>
+            </div>
+          </div>
+        </article>
+
+        <article
+          class="min-w-[11rem] snap-start rounded-xl border border-[#17364A1A] bg-white p-3 shadow-sm sm:min-w-0"
+        >
+          <div class="flex items-center gap-3">
+            <span
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#1FBEFF29] text-[#0B8EC2]"
+            >
+              <i class="pi pi-calendar text-sm"></i>
+            </span>
+            <div class="min-w-0">
+              <small class="block text-[11px] uppercase tracking-wide text-[#17364A8C]">{{
+                'adminEvents.stats.total' | translate
+              }}</small>
+              <strong class="block text-2xl font-extrabold leading-none text-[#17364A]">{{
+                stats.total
+              }}</strong>
+            </div>
+          </div>
         </article>
       </div>
 
@@ -84,7 +102,7 @@
           </p>
         </div>
 
-        <div class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
+        <div class="rounded-2xl p-4 border border-[#17364A1A] bg-white shadow-sm">
           <app-events-table-section
             [events]="events$ | async"
             (view)="viewEvent($event)"

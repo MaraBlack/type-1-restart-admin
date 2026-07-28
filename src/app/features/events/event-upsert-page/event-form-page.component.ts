@@ -53,6 +53,7 @@ type EventFormValue = {
   googleMapsUrl: string;
   registrationUrl: string;
   coverImageUrl: string;
+  coverImageSelected: boolean;
   instagramUrl: string;
   facebookUrl: string;
   xUrl: string;
@@ -154,6 +155,7 @@ export class EventFormPageComponent implements OnInit {
     googleMapsUrl: ['', this.optionalUrlValidator],
     registrationUrl: ['', this.optionalUrlValidator],
     coverImageUrl: ['', [Validators.required, this.optionalUrlValidator]],
+    coverImageSelected: [false, Validators.requiredTrue],
     instagramUrl: ['', this.optionalUrlValidator],
     facebookUrl: ['', this.optionalUrlValidator],
     xUrl: ['', this.optionalUrlValidator],
@@ -196,6 +198,7 @@ export class EventFormPageComponent implements OnInit {
     this.eventsService.getEventById(this.eventId).subscribe((event) => {
       this.form.patchValue(this.toFormValue(event));
       this.selectedImagePreviewUrl = event.coverImage?.url ?? event.coverImageUrl ?? null;
+      this.form.controls.coverImageSelected.setValue(Boolean(this.selectedImagePreviewUrl));
 
       this.form.controls.moderatorIds.clear();
       this.resolveModeratorIds(event).forEach((moderatorId) => this.addModeratorId(moderatorId));
@@ -423,6 +426,19 @@ export class EventFormPageComponent implements OnInit {
     this.form.controls.coverImageUrl.setValue(this.selectedImagePreviewUrl);
     this.form.controls.coverImageUrl.markAsDirty();
     this.form.controls.coverImageUrl.updateValueAndValidity();
+    this.form.controls.coverImageSelected.setValue(true);
+    this.form.controls.coverImageSelected.markAsDirty();
+    this.form.controls.coverImageSelected.updateValueAndValidity();
+  }
+
+  protected onImageRemove(): void {
+    this.selectedImagePreviewUrl = null;
+    this.form.controls.coverImageUrl.setValue('');
+    this.form.controls.coverImageUrl.markAsDirty();
+    this.form.controls.coverImageUrl.updateValueAndValidity();
+    this.form.controls.coverImageSelected.setValue(false);
+    this.form.controls.coverImageSelected.markAsDirty();
+    this.form.controls.coverImageSelected.updateValueAndValidity();
   }
 
   protected cancel(): void {

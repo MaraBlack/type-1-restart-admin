@@ -22,13 +22,6 @@
       </a>
 
       <form [formGroup]="form" class="mt-6 space-y-6" (ngSubmit)="save()">
-        <div
-          class="rounded-xl border border-[#17364A1F] bg-white px-4 py-3 text-xs text-[#17364A99]"
-        >
-          Campurile marcate cu * sunt mandatory field. Pentru linkuri foloseste format valid, de
-          exemplu https://exemplu.ro.
-        </div>
-
         <article
           *ngIf="isEditMode && form.controls.status.value === 'published'"
           class="rounded-2xl border border-[#53F1B559] bg-[#53F1B51A] p-4"
@@ -470,23 +463,33 @@
 
         <article class="overflow-hidden rounded-2xl border border-[#17364A1A] bg-white shadow-sm">
           <div class="border-b border-[#17364A12] bg-slate-100/70 px-5 py-4">
-            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Imagine cover</h2>
+            <h2 class="m-0 text-base font-extrabold text-[#17364A]">Imagine cover *</h2>
           </div>
 
           <div class="space-y-4 p-5">
-            <p-fileupload
-              mode="advanced"
-              [multiple]="false"
-              [showUploadButton]="false"
-              [showCancelButton]="false"
-              accept="image/*"
-              [maxFileSize]="2000000"
-              chooseIcon="pi pi-image"
-              [chooseLabel]="'Select image'"
-              (onSelect)="onImageSelect($event)"
-            ></p-fileupload>
+            <div
+              class="rounded-xl border border-[#17364A1A] p-2"
+              [ngClass]="{ 'border-red-500': isControlInvalid('coverImageSelected') }"
+            >
+              <p-fileupload
+                mode="advanced"
+                [multiple]="false"
+                [showUploadButton]="false"
+                [showCancelButton]="false"
+                accept="image/*"
+                [maxFileSize]="2000000"
+                chooseIcon="pi pi-image"
+                [chooseLabel]="'Select image'"
+                (onSelect)="onImageSelect($event)"
+                (onRemove)="onImageRemove()"
+                (onClear)="onImageRemove()"
+              ></p-fileupload>
+            </div>
+            <small *ngIf="isControlInvalid('coverImageSelected')" class="text-xs text-red-500">
+              Imagine cover este mandatory field. Selecteaza un fisier.
+            </small>
 
-            <label class="grid gap-1.5">
+            <!-- <label class="grid gap-1.5">
               <span class="text-sm font-bold text-[#17364A]"
                 >{{ 'adminEvents.form.fields.coverImageUrl' | translate }} *</span
               >
@@ -502,7 +505,7 @@
               >
                 {{ getControlHint('coverImageUrl', 'Cover Image URL') }}
               </small>
-            </label>
+            </label> -->
 
             <div
               *ngIf="selectedImagePreviewUrl || form.controls.coverImageUrl.value"
